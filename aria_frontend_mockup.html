@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARIA — Digital FTE Frontend Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080E1A;
+  --surface: #0F1929;
+  --card: #141F33;
+  --card2: #192540;
+  --border: #1E3050;
+  --border2: #243760;
+  --em: #10B981;
+  --em2: #059669;
+  --em-dim: rgba(16,185,129,0.12);
+  --em-glow: rgba(16,185,129,0.25);
+  --ind: #6366F1;
+  --ind-dim: rgba(99,102,241,0.12);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245,158,11,0.12);
+  --red: #EF4444;
+  --red-dim: rgba(239,68,68,0.12);
+  --text: #F0F6FF;
+  --text2: #8BA4C4;
+  --text3: #4A6285;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 14px; line-height: 1.6; overflow-x:hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:999;
+  background: rgba(8,14,26,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-logo { font-family: var(--font-head); font-size: 18px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.nav-logo span { color: var(--em); }
+.pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--em); position: relative; }
+.pulse-dot::after { content:''; position:absolute; inset:-3px; border-radius:50%; background: var(--em); opacity:0.4; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:0.4} 50%{transform:scale(1.8);opacity:0} }
+.nav-links { display: flex; gap: 4px; }
+.nav-btn {
+  padding: 6px 14px; border-radius: 8px; font-family: var(--font-body);
+  font-size: 13px; font-weight: 500; cursor: pointer; border: none;
+  color: var(--text2); background: transparent; transition: all 0.2s;
+}
+.nav-btn:hover, .nav-btn.active { color: var(--text); background: var(--card); }
+.nav-btn.active { color: var(--em); }
+.nav-cta {
+  padding: 7px 18px; border-radius: 8px; font-family: var(--font-body);
+  font-size: 13px; font-weight: 600; cursor: pointer; border: none;
+  background: var(--em); color: #000; transition: all 0.2s;
+}
+.nav-cta:hover { background: #0ea572; transform: translateY(-1px); }
+
+/* PAGE SYSTEM */
+.page { display:none; padding-top: 56px; min-height: 100vh; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* ─── LANDING PAGE ─── */
+.hero { 
+  padding: 100px 64px 80px; 
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--em-dim); border: 1px solid var(--em-glow);
+  padding: 5px 14px 5px 8px; border-radius: 100px; margin-bottom: 24px;
+  font-size: 12px; font-weight: 600; color: var(--em); letter-spacing: 0.05em; text-transform: uppercase;
+}
+.hero h1 {
+  font-family: var(--font-head); font-size: 56px; line-height: 1.05;
+  font-weight: 800; color: var(--text); margin-bottom: 20px;
+}
+.hero h1 em { color: var(--em); font-style: normal; }
+.hero p { font-size: 16px; color: var(--text2); line-height: 1.7; margin-bottom: 36px; max-width: 480px; }
+.hero-btns { display: flex; gap: 12px; }
+.btn-primary {
+  padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer;
+  font-family: var(--font-body); font-weight: 600; font-size: 14px;
+  background: var(--em); color: #000; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { background: #0ea572; transform: translateY(-2px); box-shadow: 0 8px 24px var(--em-glow); }
+.btn-ghost {
+  padding: 12px 24px; border-radius: 10px; cursor: pointer;
+  font-family: var(--font-body); font-weight: 600; font-size: 14px;
+  background: transparent; color: var(--text2); border: 1px solid var(--border2); transition: all 0.2s;
+}
+.btn-ghost:hover { background: var(--card); color: var(--text); border-color: var(--border2); }
+
+/* Hero right — terminal card */
+.hero-terminal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; position: relative;
+}
+.terminal-header {
+  background: var(--card); padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border);
+}
+.term-dots { display:flex; gap:6px; }
+.term-dot { width:10px; height:10px; border-radius:50%; }
+.td1{background:#EF4444;} .td2{background:#F59E0B;} .td3{background:#10B981;}
+.term-title { font-family: var(--font-mono); font-size: 11px; color: var(--text3); flex:1; text-align:center; }
+.terminal-body { padding: 20px; font-family: var(--font-mono); font-size: 12px; line-height: 2; }
+.t-line { display: flex; gap: 8px; }
+.t-prompt { color: var(--em); }
+.t-cmd { color: var(--text); }
+.t-out { color: var(--text3); }
+.t-out.success { color: var(--em); }
+.t-out.warn { color: var(--amber); }
+.t-cursor { display:inline-block; width:8px; height:14px; background:var(--em); animation: blink 1s infinite; vertical-align: middle; }
+@keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+/* Stats row */
+.stats-row { padding: 0 64px 60px; max-width: 1200px; margin: 0 auto; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px;
+  display: flex; flex-direction: column; gap: 6px;
+  position: relative; overflow: hidden; transition: border-color 0.3s;
+}
+.stat-card:hover { border-color: var(--border2); }
+.stat-card::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg, transparent, rgba(255,255,255,0.02)); pointer-events:none; }
+.stat-num { font-family: var(--font-head); font-size: 32px; font-weight: 800; }
+.stat-lbl { font-size: 12px; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-sub { font-size: 11px; color: var(--em); margin-top: 4px; font-weight: 600; }
+.s-em { color: var(--em); } .s-ind { color: var(--ind); } .s-amb { color: var(--amber); } .s-red { color: var(--red); }
+
+/* Feature grid */
+.features { padding: 20px 64px 80px; max-width: 1200px; margin: 0 auto; }
+.section-label { font-size: 11px; font-weight: 700; color: var(--em); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-family: var(--font-head); font-size: 36px; font-weight: 800; margin-bottom: 48px; color: var(--text); }
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.feat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px; transition: all 0.25s; position: relative; overflow: hidden;
+}
+.feat-card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+.feat-icon {
+  width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 18px;
+}
+.fi-em { background: var(--em-dim); } .fi-ind { background: var(--ind-dim); } .fi-amb { background: var(--amber-dim); }
+.feat-title { font-family: var(--font-head); font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.feat-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
+.feat-badge {
+  display: inline-block; margin-top: 14px; padding: 3px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 600; font-family: var(--font-mono);
+}
+.fb-em { background: var(--em-dim); color: var(--em); }
+.fb-ind { background: var(--ind-dim); color: var(--ind); }
+.fb-amb { background: var(--amber-dim); color: var(--amber); }
+
+/* Channel strip */
+.channel-strip {
+  margin: 0 64px 80px; max-width: calc(1200px - 128px);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px;
+  display: flex; gap: 32px; align-items: center; flex-wrap: wrap;
+}
+.ch-item { display: flex; align-items: center; gap: 10px; }
+.ch-dot { width: 8px; height: 8px; border-radius: 50%; }
+.ch-em { background: var(--em); box-shadow: 0 0 8px var(--em); }
+.ch-ind { background: var(--ind); box-shadow: 0 0 8px var(--ind); }
+.ch-amb { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.ch-name { font-size: 13px; font-weight: 600; }
+.ch-stat { font-size: 11px; color: var(--text3); }
+.ch-sep { width: 1px; height: 28px; background: var(--border); }
+
+/* ─── SUPPORT FORM PAGE ─── */
+.form-page { max-width: 680px; margin: 0 auto; padding: 60px 24px 80px; }
+.form-header { text-align: center; margin-bottom: 40px; }
+.form-header h2 { font-family: var(--font-head); font-size: 32px; font-weight: 800; margin-bottom: 10px; }
+.form-header p { color: var(--text2); font-size: 15px; }
+
+/* Progress */
+.progress-track { display: flex; gap: 0; margin-bottom: 40px; position: relative; }
+.progress-track::before { content:''; position:absolute; top: 17px; left: 48px; right: 48px; height: 2px; background: var(--border); z-index:0; }
+.progress-fill { position:absolute; top: 17px; left: 48px; height: 2px; background: var(--em); z-index:1; transition: width 0.4s ease; }
+.prog-step { flex:1; display:flex; flex-direction:column; align-items:center; gap: 8px; z-index:2; }
+.prog-num {
+  width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; font-family: var(--font-mono); border: 2px solid var(--border);
+  background: var(--bg); transition: all 0.3s;
+}
+.prog-step.done .prog-num { background: var(--em); border-color: var(--em); color: #000; }
+.prog-step.active .prog-num { border-color: var(--em); color: var(--em); }
+.prog-lbl { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.prog-step.active .prog-lbl, .prog-step.done .prog-lbl { color: var(--em); }
+
+/* Form card */
+.form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
+.form-step { display: none; }
+.form-step.active { display: block; animation: fadeIn 0.3s ease; }
+.field-group { margin-bottom: 24px; }
+label { display: block; font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 12px 16px; background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 10px; color: var(--text); font-family: var(--font-body); font-size: 14px;
+  transition: all 0.2s; outline: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--em); background: var(--card2); box-shadow: 0 0 0 3px var(--em-dim); }
+.form-textarea { resize: vertical; min-height: 140px; }
+.form-select { appearance: none; cursor: pointer; }
+.char-count { text-align: right; font-size: 11px; color: var(--text3); margin-top: 6px; font-family: var(--font-mono); }
+
+/* Priority radios */
+.priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.prio-btn {
+  padding: 12px; border-radius: 10px; border: 1.5px solid var(--border);
+  cursor: pointer; text-align: center; transition: all 0.2s; background: var(--card);
+}
+.prio-btn.low { }
+.prio-btn.medium.selected { border-color: var(--amber); background: var(--amber-dim); }
+.prio-btn.high.selected { border-color: var(--red); background: var(--red-dim); }
+.prio-btn.low.selected { border-color: var(--em); background: var(--em-dim); }
+.prio-icon { font-size: 18px; margin-bottom: 4px; }
+.prio-lbl { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.form-actions { display: flex; justify-content: space-between; margin-top: 32px; }
+.btn-back { padding: 11px 22px; border-radius: 10px; border: 1.5px solid var(--border); background: transparent; color: var(--text2); font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-back:hover { border-color: var(--border2); color: var(--text); }
+.btn-next { padding: 11px 28px; border-radius: 10px; border: none; background: var(--em); color: #000; font-family: var(--font-body); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-next:hover { background: #0ea572; transform: translateY(-1px); box-shadow: 0 6px 20px var(--em-glow); }
+
+/* Success card */
+.success-card { text-align: center; padding: 20px 0; display: none; animation: fadeIn 0.5s ease; }
+.success-icon { font-size: 56px; margin-bottom: 20px; }
+.success-card h3 { font-family: var(--font-head); font-size: 26px; font-weight: 800; margin-bottom: 10px; color: var(--em); }
+.ticket-display {
+  background: var(--em-dim); border: 1px solid var(--em-glow); border-radius: 12px;
+  padding: 18px 24px; margin: 20px auto; max-width: 360px;
+  font-family: var(--font-mono); font-size: 15px; font-weight: 700; color: var(--em); letter-spacing: 0.04em;
+}
+.ticket-id-lbl { font-size: 10px; color: var(--text3); font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-weight: 700; }
+.eta-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 14px 0; font-size: 13px; color: var(--text2); }
+.eta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--em); animation: pulse 1.5s infinite; }
+
+/* ─── DASHBOARD PAGE ─── */
+.dashboard-page { padding: 32px 40px 80px; max-width: 1400px; margin: 0 auto; }
+.dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.dash-title { font-family: var(--font-head); font-size: 26px; font-weight: 800; }
+.dash-sub { font-size: 13px; color: var(--text3); margin-top: 4px; }
+.dash-actions { display: flex; gap: 10px; }
+.btn-sm { padding: 8px 16px; border-radius: 8px; font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-sm-ghost { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+.btn-sm-ghost:hover { background: var(--card); color: var(--text); }
+.btn-sm-em { background: var(--em); border: none; color: #000; }
+.btn-sm-em:hover { background: #0ea572; }
+
+/* KPI row */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 24px; position: relative; overflow: hidden;
+}
+.kpi-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.kpi-card.k-em::after { background: linear-gradient(90deg, var(--em), #0ea572); }
+.kpi-card.k-ind::after { background: linear-gradient(90deg, var(--ind), #818cf8); }
+.kpi-card.k-amb::after { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+.kpi-card.k-red::after { background: linear-gradient(90deg, var(--red), #f87171); }
+.kpi-label { font-size: 11px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+.kpi-val { font-family: var(--font-head); font-size: 38px; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+.kpi-val.k-em { color: var(--em); } .kpi-val.k-ind { color: var(--ind); } .kpi-val.k-amb { color: var(--amber); } .kpi-val.k-red { color: var(--red); }
+.kpi-trend { font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 5px; }
+.trend-up { color: var(--em); } .trend-dn { color: var(--red); }
+.live-badge { position: absolute; top: 18px; right: 18px; background: var(--em-dim); border: 1px solid var(--em-glow); color: var(--em); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 4px; }
+.live-d { width: 5px; height: 5px; border-radius: 50%; background: var(--em); animation: pulse 1.5s infinite; }
+
+/* Mid row */
+.mid-row { display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; margin-bottom: 24px; }
+.dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+.dash-card-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; margin-bottom: 20px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Donut chart CSS */
+.donut-wrap { display: flex; align-items: center; gap: 24px; }
+.donut-svg { flex-shrink: 0; }
+.donut-legend { display: flex; flex-direction: column; gap: 14px; }
+.dl-item { display: flex; align-items: center; gap: 10px; }
+.dl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink:0; }
+.dl-label { font-size: 12px; color: var(--text2); }
+.dl-val { font-family: var(--font-mono); font-size: 14px; font-weight: 700; margin-left: auto; }
+
+/* Line chart CSS */
+.chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 100px; }
+.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.chart-bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.4s ease; position: relative; }
+.chart-day { font-size: 10px; color: var(--text3); font-family: var(--font-mono); }
+.chart-area {
+  position: relative; height: 120px; margin-bottom: 8px;
+  background: linear-gradient(to bottom, rgba(16,185,129,0.06) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border); border-left: 1px solid var(--border);
+  border-radius: 0 0 0 4px; overflow: hidden;
+}
+.chart-line { position: absolute; bottom: 0; left: 0; right: 0; height: 100%; }
+
+/* SVG line chart */
+.line-chart-svg { width: 100%; height: 100%; overflow: visible; }
+
+/* Ticket table */
+.ticket-table { width: 100%; border-collapse: collapse; }
+.ticket-table th { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; padding: 0 0 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.ticket-table td { padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+.ticket-table tr:last-child td { border-bottom: none; }
+.ticket-table tr:hover td { background: rgba(255,255,255,0.01); }
+.ticket-id { font-family: var(--font-mono); font-size: 12px; color: var(--text3); }
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.b-em { background: var(--em-dim); color: var(--em); } .b-ind { background: var(--ind-dim); color: var(--ind); }
+.b-amb { background: var(--amber-dim); color: var(--amber); } .b-red { background: var(--red-dim); color: var(--red); }
+.b-slate { background: rgba(100,116,139,0.15); color: #64748b; }
+.sentiment-bar { width: 60px; height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; }
+.sentiment-fill { height: 100%; border-radius: 3px; }
+.time-ago { font-size: 12px; color: var(--text3); }
+
+/* Briefing card */
+.briefing-card {
+  background: linear-gradient(135deg, var(--surface), var(--card));
+  border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px;
+  margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.briefing-card::before { content:''; position:absolute; top:-1px; left:0; right:0; height:2px; background: linear-gradient(90deg, var(--em), var(--ind)); }
+.briefing-title { font-family: var(--font-head); font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+.briefing-date { font-size: 12px; color: var(--text3); margin-bottom: 20px; }
+.briefing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+.b-metric { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.b-metric-val { font-family: var(--font-head); font-size: 22px; font-weight: 800; color: var(--em); }
+.b-metric-lbl { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px; }
+
+/* ─── TICKET STATUS ─── */
+.status-page { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+.status-header { margin-bottom: 32px; }
+.status-header h2 { font-family: var(--font-head); font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+.ticket-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+.status-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.status-card-header { background: var(--card); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+.s-field { font-size: 12px; }
+.s-label { color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+.s-val { color: var(--text); font-weight: 600; }
+.s-val.mono { font-family: var(--font-mono); font-size: 13px; }
+.conversation { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.msg { display: flex; gap: 12px; max-width: 88%; }
+.msg.agent { align-self: flex-start; }
+.msg.customer { align-self: flex-end; flex-direction: row-reverse; }
+.msg-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+.av-agent { background: var(--em-dim); border: 1px solid var(--em-glow); }
+.av-customer { background: var(--ind-dim); border: 1px solid rgba(99,102,241,0.2); }
+.msg-bubble { padding: 14px 18px; border-radius: 14px; font-size: 13px; line-height: 1.65; }
+.msg.agent .msg-bubble { background: var(--card); border: 1px solid var(--border); color: var(--text); border-top-left-radius: 4px; }
+.msg.customer .msg-bubble { background: var(--em); color: #000; font-weight: 500; border-top-right-radius: 4px; }
+.msg-time { font-size: 10px; color: var(--text3); margin-top: 4px; font-family: var(--font-mono); }
+.msg.customer .msg-time { text-align: right; }
+
+/* Refresh indicator */
+.refresh-bar { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text3); margin-bottom: 24px; }
+.refresh-progress { flex:1; height: 3px; background: var(--border); border-radius: 2px; overflow:hidden; }
+.refresh-fill { height:100%; background: var(--em); animation: refill 15s linear infinite; border-radius: 2px; }
+@keyframes refill { from{width:100%} to{width:0%} }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* Tab bar below nav for dashboard */
+.tab-bar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 40px; display: flex; gap: 0; overflow-x: auto;
+}
+.tab { padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+.tab:hover { color: var(--text2); }
+.tab.active { color: var(--em); border-bottom-color: var(--em); }
+
+/* Auto-refresh badge */
+.auto-refresh { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text3); font-family: var(--font-mono); }
+
+/* Floating status widget */
+.corner-widget {
+  position: fixed; bottom: 24px; right: 24px; z-index: 998;
+  background: var(--card2); border: 1px solid var(--border2); border-radius: 14px;
+  padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.cw-title { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+.cw-val { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--em); }
+.cw-sep { width: 1px; height: 28px; background: var(--border); }
+
+/* ─── RESPONSIVE / UTILS ─── */
+.w-full { width: 100%; }
+.text-center { text-align: center; }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.flex { display: flex; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+
+/* Tooltip on hover */
+.tooltip { position: relative; cursor: help; }
+.tooltip::after {
+  content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--card2); border: 1px solid var(--border2); color: var(--text2); padding: 6px 10px;
+  border-radius: 7px; font-size: 11px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.tooltip:hover::after { opacity: 1; }
+
+/* Category options */
+.cat-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cat-opt { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; background: var(--card); transition: all 0.2s; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+.cat-opt:hover { border-color: var(--border2); }
+.cat-opt.selected { border-color: var(--em); background: var(--em-dim); color: var(--em); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="pulse-dot"></div>
+    ARIA<span>FTE</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('landing')">Home</button>
+    <button class="nav-btn" onclick="showPage('support')">Submit Ticket</button>
+    <button class="nav-btn" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-btn" onclick="showPage('status')">Ticket Status</button>
+  </div>
+  <button class="nav-cta" onclick="showPage('support')">Get Support →</button>
+</nav>
+
+<!-- CORNER WIDGET -->
+<div class="corner-widget" id="corner-widget">
+  <div>
+    <div class="cw-title">System Status</div>
+    <div class="cw-val">● OPERATIONAL</div>
+  </div>
+  <div class="cw-sep"></div>
+  <div>
+    <div class="cw-title">Tickets Today</div>
+    <div class="cw-val">247</div>
+  </div>
+  <div class="cw-sep"></div>
+  <div>
+    <div class="cw-title">Avg Response</div>
+    <div class="cw-val">2.3s</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ LANDING ═══════════════════════════════════ -->
+<div class="page active" id="page-landing">
+  <!-- HERO -->
+  <div style="padding-top: 20px; background: radial-gradient(ellipse 80% 60% at 60% -10%, rgba(16,185,129,0.07) 0%, transparent 60%);">
+    <div class="hero">
+      <div>
+        <div class="hero-badge">
+          <span class="pulse-dot" style="width:6px;height:6px;"></span>
+          Live Production System
+        </div>
+        <h1>Your 24/7 <em>AI Customer</em> Success Employee</h1>
+        <p>ARIA handles every support ticket across Email, WhatsApp, and Web — autonomously, instantly, flawlessly. Powered by Groq LLaMA 3.3 70B.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('support')">Submit a Ticket →</button>
+          <button class="btn-ghost" onclick="showPage('dashboard')">View Dashboard</button>
+        </div>
+      </div>
+      <div class="hero-terminal">
+        <div class="terminal-header">
+          <div class="term-dots">
+            <div class="term-dot td1"></div>
+            <div class="term-dot td2"></div>
+            <div class="term-dot td3"></div>
+          </div>
+          <div class="term-title">aria-agent · live</div>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line"><span class="t-prompt">▶</span><span class="t-cmd">aria.process_ticket(channel="whatsapp")</span></div>
+          <div class="t-line"><span class="t-out">  [+] Customer identified: usr_a9f2c1</span></div>
+          <div class="t-line"><span class="t-out">  [+] History loaded: 3 prior interactions</span></div>
+          <div class="t-line"><span class="t-out">  [+] KB search: "password reset" → 1 match</span></div>
+          <div class="t-line"><span class="t-out success">  [✓] Ticket #TKT-8842 created</span></div>
+          <div class="t-line"><span class="t-out success">  [✓] Response sent via WhatsApp (1.8s)</span></div>
+          <div class="t-line"><span class="t-out">  [~] Sentiment score: 0.82 (positive)</span></div>
+          <div class="t-line"><span class="t-prompt">▶</span><span class="t-cmd">aria.metrics()</span></div>
+          <div class="t-line"><span class="t-out warn">  Uptime: 99.97% | Tickets today: 247</span></div>
+          <div class="t-line"><span class="t-out">  Escalations: 12 (4.9%) | Avg: 2.3s</span></div>
+          <div class="t-line"><span class="t-prompt">▶</span><span class="t-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num s-em">2.3s</div><div class="stat-lbl">Avg Response Time</div><div class="stat-sub">↓ 0.4s vs last week</div></div>
+      <div class="stat-card"><div class="stat-num s-ind">99.9%</div><div class="stat-lbl">System Uptime</div><div class="stat-sub">30-day rolling avg</div></div>
+      <div class="stat-card"><div class="stat-num s-amb">3</div><div class="stat-lbl">Active Channels</div><div class="stat-sub">Email · WhatsApp · Web</div></div>
+      <div class="stat-card"><div class="stat-num s-em">24/7</div><div class="stat-lbl">Always On</div><div class="stat-sub">Zero downtime SLA</div></div>
+    </div>
+  </div>
+
+  <!-- CHANNEL STRIP -->
+  <div class="channel-strip">
+    <div class="ch-item"><div class="ch-dot ch-em"></div><div><div class="ch-name">📧 Gmail</div><div class="ch-stat">47 tickets today</div></div></div>
+    <div class="ch-sep"></div>
+    <div class="ch-item"><div class="ch-dot ch-ind"></div><div><div class="ch-name">💬 WhatsApp</div><div class="ch-stat">128 tickets today</div></div></div>
+    <div class="ch-sep"></div>
+    <div class="ch-item"><div class="ch-dot ch-amb"></div><div><div class="ch-name">🌐 Web Form</div><div class="ch-stat">72 tickets today</div></div></div>
+    <div class="ch-sep"></div>
+    <div style="margin-left:auto; font-size:12px; color: var(--text3);">Kafka: Confluent Cloud · DB: Neon PostgreSQL · AI: Groq llama-3.3-70b</div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="section-label">Capabilities</div>
+    <div class="section-title">Built for Enterprise CX at Scale</div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon fi-em">📧</div>
+        <div class="feat-title">Email Intelligence</div>
+        <div class="feat-desc">Monitors Gmail for unread priority messages, auto-replies with context-aware formal responses. Full thread awareness across all prior interactions.</div>
+        <div class="feat-badge fb-em">Gmail API</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-ind">💬</div>
+        <div class="feat-title">WhatsApp Support</div>
+        <div class="feat-desc">Twilio-powered WhatsApp webhook. Conversational, concise responses optimized for mobile. Auto-escalates on "urgent" keywords.</div>
+        <div class="feat-badge fb-ind">Twilio API</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-amb">🌐</div>
+        <div class="feat-title">Web Form Intake</div>
+        <div class="feat-desc">Pydantic v2 validated multi-step support form. Instant ticket creation, real-time status tracking, and AI response within 5 minutes.</div>
+        <div class="feat-badge fb-amb">FastAPI</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-em">📊</div>
+        <div class="feat-title">CEO Briefings</div>
+        <div class="feat-desc">Every Monday, ARIA generates an executive briefing with KPIs, wins, bottlenecks, and proactive recommendations using real Neon DB data.</div>
+        <div class="feat-badge fb-em">Auto-Generated</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-ind">🧠</div>
+        <div class="feat-title">Sentiment Analysis</div>
+        <div class="feat-desc">Real-time sentiment scoring (0.0–1.0) on every message. Auto-escalates to human agents when score drops below 0.3 threshold.</div>
+        <div class="feat-badge fb-ind">Groq LLaMA</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon fi-amb">⚡</div>
+        <div class="feat-title">Auto-Escalation</div>
+        <div class="feat-desc">Legal mentions, refunds, security incidents — ARIA instantly routes to human agents with a full summary, urgency level, and resolution suggestion.</div>
+        <div class="feat-badge fb-amb">Rule Engine</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ SUPPORT FORM ═══════════════════════════════════ -->
+<div class="page" id="page-support">
+  <div class="form-page">
+    <div class="form-header">
+      <div class="hero-badge" style="margin: 0 auto 16px;">🌐 Web Form Channel</div>
+      <h2>Submit a Support Request</h2>
+      <p>ARIA will respond within 5 minutes, 24/7.</p>
+    </div>
+
+    <div class="progress-track" id="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+      <div class="prog-step active" id="ps1"><div class="prog-num">1</div><div class="prog-lbl">Contact</div></div>
+      <div class="prog-step" id="ps2"><div class="prog-num">2</div><div class="prog-lbl">Details</div></div>
+      <div class="prog-step" id="ps3"><div class="prog-num">3</div><div class="prog-lbl">Message</div></div>
+    </div>
+
+    <div class="form-card">
+      <!-- STEP 1 -->
+      <div class="form-step active" id="step1">
+        <div class="field-group">
+          <label>Full Name</label>
+          <input class="form-input" type="text" placeholder="e.g. Hassaan Ahmed" id="f-name">
+        </div>
+        <div class="field-group">
+          <label>Email Address</label>
+          <input class="form-input" type="email" placeholder="you@example.com" id="f-email">
+        </div>
+        <div class="form-actions">
+          <div></div>
+          <button class="btn-next" onclick="nextStep(1)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="form-step" id="step2">
+        <div class="field-group">
+          <label>Subject</label>
+          <input class="form-input" type="text" placeholder="Brief description of your issue" id="f-subject">
+        </div>
+        <div class="field-group">
+          <label>Category</label>
+          <div class="cat-opts">
+            <div class="cat-opt selected" onclick="selectCat(this)">🔧 Technical</div>
+            <div class="cat-opt" onclick="selectCat(this)">💳 Billing</div>
+            <div class="cat-opt" onclick="selectCat(this)">🐛 Bug Report</div>
+            <div class="cat-opt" onclick="selectCat(this)">💡 Feature Request</div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Priority</label>
+          <div class="priority-grid">
+            <div class="prio-btn low selected" onclick="selectPrio(this, 'low')"><div class="prio-icon">🟢</div><div class="prio-lbl">Low</div></div>
+            <div class="prio-btn medium" onclick="selectPrio(this, 'medium')"><div class="prio-icon">🟡</div><div class="prio-lbl">Medium</div></div>
+            <div class="prio-btn high" onclick="selectPrio(this, 'high')"><div class="prio-icon">🔴</div><div class="prio-lbl">High</div></div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-back" onclick="prevStep(2)">← Back</button>
+          <button class="btn-next" onclick="nextStep(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="form-step" id="step3">
+        <div class="field-group">
+          <label>Describe Your Issue</label>
+          <textarea class="form-textarea" placeholder="Please describe your issue in detail. Include any error messages, steps to reproduce, and what you've already tried..." id="f-message" oninput="updateCharCount(this)"></textarea>
+          <div class="char-count"><span id="char-count">0</span> / 1000</div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-back" onclick="prevStep(3)">← Back</button>
+          <button class="btn-next" onclick="submitForm()">Submit to ARIA →</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="success-card" id="success-card">
+        <div class="success-icon">✅</div>
+        <h3>Ticket Submitted!</h3>
+        <p style="color: var(--text2); margin-bottom: 6px;">ARIA is processing your request.</p>
+        <div class="ticket-display">
+          <div class="ticket-id-lbl">Your Ticket ID</div>
+          TKT-<span id="gen-ticket-id">8847</span>
+        </div>
+        <div class="eta-row"><div class="eta-dot"></div>Estimated response time: <strong>~2–5 minutes</strong></div>
+        <div style="display:flex; gap:12px; justify-content:center; margin-top:20px;">
+          <button class="btn-primary" onclick="showPage('status')">Track Status →</button>
+          <button class="btn-ghost" onclick="resetForm()">Submit Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ DASHBOARD ═══════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+  <div class="tab-bar">
+    <div class="tab active">Overview</div>
+    <div class="tab">Tickets</div>
+    <div class="tab">Analytics</div>
+    <div class="tab">Escalations</div>
+    <div class="tab">CEO Briefing</div>
+  </div>
+  <div class="dashboard-page">
+    <div class="dash-header">
+      <div>
+        <div class="dash-title">ARIA Command Center</div>
+        <div class="dash-sub">Thursday, 19 March 2026 · 16:42 PKT · All systems operational</div>
+      </div>
+      <div class="dash-actions">
+        <div class="auto-refresh" style="margin-right:12px;"><div class="pulse-dot" style="width:5px;height:5px;"></div> Auto-refresh: 30s</div>
+        <button class="btn-sm btn-sm-ghost">↓ Export CSV</button>
+        <button class="btn-sm btn-sm-em" onclick="showPage('support')">+ New Ticket</button>
+      </div>
+    </div>
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-card k-em">
+        <div class="kpi-label">Total Tickets (24h)</div>
+        <div class="kpi-val k-em">247</div>
+        <div class="kpi-trend"><span class="trend-up">↑ 18%</span> vs yesterday</div>
+      </div>
+      <div class="kpi-card k-ind">
+        <div class="live-badge"><div class="live-d"></div>LIVE</div>
+        <div class="kpi-label">Active Conversations</div>
+        <div class="kpi-val k-ind">14</div>
+        <div class="kpi-trend">Across 3 channels</div>
+      </div>
+      <div class="kpi-card k-amb">
+        <div class="kpi-label">Avg Response Time</div>
+        <div class="kpi-val k-amb">2.3s</div>
+        <div class="kpi-trend"><span class="trend-up">↓ 0.4s</span> improvement</div>
+      </div>
+      <div class="kpi-card k-red">
+        <div class="kpi-label">Escalation Rate</div>
+        <div class="kpi-val k-red">4.9%</div>
+        <div class="kpi-trend"><span class="trend-up">↓ 1.2%</span> vs last week</div>
+      </div>
+    </div>
+
+    <!-- MID ROW -->
+    <div class="mid-row">
+      <!-- Donut chart -->
+      <div class="dash-card">
+        <div class="dash-card-title">Channel Distribution</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#1E3050" stroke-width="18"/>
+            <!-- WhatsApp: 52% -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#6366F1" stroke-width="18"
+              stroke-dasharray="157 145" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+            <!-- Email: 19% -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#10B981" stroke-width="18"
+              stroke-dasharray="57 245" stroke-dashoffset="-157" transform="rotate(-90 60 60)"/>
+            <!-- Web: 29% -->
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#F59E0B" stroke-width="18"
+              stroke-dasharray="88 214" stroke-dashoffset="-214" transform="rotate(-90 60 60)"/>
+            <text x="60" y="56" text-anchor="middle" fill="#F0F6FF" font-family="Syne,sans-serif" font-size="16" font-weight="800">247</text>
+            <text x="60" y="70" text-anchor="middle" fill="#4A6285" font-family="DM Sans,sans-serif" font-size="9">tickets</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="dl-item"><div class="dl-dot" style="background:#6366F1"></div><span class="dl-label">WhatsApp</span><span class="dl-val">128</span></div>
+            <div class="dl-item"><div class="dl-dot" style="background:#F59E0B"></div><span class="dl-label">Web Form</span><span class="dl-val">72</span></div>
+            <div class="dl-item"><div class="dl-dot" style="background:#10B981"></div><span class="dl-label">Email</span><span class="dl-val">47</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sentiment line chart -->
+      <div class="dash-card">
+        <div class="dash-card-title">Sentiment Trend — 7 Days</div>
+        <div style="position:relative; height:130px; margin-bottom:12px;">
+          <svg viewBox="0 0 520 130" style="width:100%; height:100%; overflow:visible;">
+            <defs>
+              <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#10B981" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid lines -->
+            <line x1="0" y1="32" x2="520" y2="32" stroke="#1E3050" stroke-width="1"/>
+            <line x1="0" y1="65" x2="520" y2="65" stroke="#1E3050" stroke-width="1"/>
+            <line x1="0" y1="98" x2="520" y2="98" stroke="#1E3050" stroke-width="1"/>
+            <!-- Labels -->
+            <text x="0" y="30" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace">1.0</text>
+            <text x="0" y="63" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace">0.5</text>
+            <text x="0" y="96" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace">0.0</text>
+            <!-- Area fill -->
+            <path d="M 28 52 L 102 44 L 176 60 L 250 38 L 324 30 L 398 42 L 472 35 L 472 130 L 28 130 Z" fill="url(#sg)"/>
+            <!-- Line -->
+            <polyline points="28,52 102,44 176,60 250,38 324,30 398,42 472,35" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+            <!-- Dots -->
+            <circle cx="28" cy="52" r="4" fill="#10B981" stroke="#080E1A" stroke-width="2"/>
+            <circle cx="102" cy="44" r="4" fill="#10B981" stroke="#080E1A" stroke-width="2"/>
+            <circle cx="176" cy="60" r="4" fill="#10B981" stroke="#080E1A" stroke-width="2"/>
+            <circle cx="250" cy="38" r="4" fill="#10B981" stroke="#080E1A" stroke-width="2"/>
+            <circle cx="324" cy="30" r="4" fill="#10B981" stroke="#080E1A" stroke-width="2"/>
+            <circle cx="398" cy="42" r="4" fill="#10B981" stroke="#080E1A" stroke-width="2"/>
+            <circle cx="472" cy="35" r="4" fill="#10B981" stroke="#080E1A" stroke-width="2"/>
+            <!-- Day labels -->
+            <text x="22" y="120" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">Mon</text>
+            <text x="102" y="120" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">Tue</text>
+            <text x="176" y="120" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">Wed</text>
+            <text x="250" y="120" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">Thu</text>
+            <text x="324" y="120" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">Fri</text>
+            <text x="398" y="120" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">Sat</text>
+            <text x="472" y="120" fill="#4A6285" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">Sun</text>
+          </svg>
+        </div>
+        <div style="display:flex; gap:20px; font-size:12px; color: var(--text3);">
+          <span>Avg: <strong style="color: var(--em)">0.74</strong></span>
+          <span>High: <strong style="color: var(--em)">0.91</strong></span>
+          <span>Escalations: <strong style="color: var(--red)">12</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TICKET TABLE -->
+    <div class="dash-card" style="margin-bottom: 24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <div class="dash-card-title" style="margin:0">Live Ticket Feed</div>
+        <div class="auto-refresh"><div class="pulse-dot" style="width:5px;height:5px;"></div>Updating every 30s</div>
+      </div>
+      <table class="ticket-table">
+        <thead>
+          <tr>
+            <th>Ticket ID</th>
+            <th>Customer</th>
+            <th>Channel</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Sentiment</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="showPage('status')" style="cursor:pointer;">
+            <td><span class="ticket-id">TKT-8847</span></td>
+            <td style="font-weight:500">Hassaan Ahmed</td>
+            <td><span class="badge b-ind">💬 WhatsApp</span></td>
+            <td><span class="badge b-slate">Technical</span></td>
+            <td><span class="badge b-amb">Processing</span></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="sentiment-bar"><div class="sentiment-fill" style="width:82%; background:#10B981"></div></div>
+                <span style="font-size:11px; color:var(--text3); font-family:var(--font-mono)">0.82</span>
+              </div>
+            </td>
+            <td class="time-ago">2m ago</td>
+          </tr>
+          <tr>
+            <td><span class="ticket-id">TKT-8846</span></td>
+            <td style="font-weight:500">Amna Faraz</td>
+            <td><span class="badge b-em">📧 Email</span></td>
+            <td><span class="badge b-slate">Billing</span></td>
+            <td><span class="badge b-red">Escalated</span></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="sentiment-bar"><div class="sentiment-fill" style="width:24%; background:#EF4444"></div></div>
+                <span style="font-size:11px; color:var(--text3); font-family:var(--font-mono)">0.24</span>
+              </div>
+            </td>
+            <td class="time-ago">8m ago</td>
+          </tr>
+          <tr>
+            <td><span class="ticket-id">TKT-8845</span></td>
+            <td style="font-weight:500">Usman Khan</td>
+            <td><span class="badge b-amb">🌐 Web Form</span></td>
+            <td><span class="badge b-slate">Technical</span></td>
+            <td><span class="badge b-em">Resolved</span></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="sentiment-bar"><div class="sentiment-fill" style="width:91%; background:#10B981"></div></div>
+                <span style="font-size:11px; color:var(--text3); font-family:var(--font-mono)">0.91</span>
+              </div>
+            </td>
+            <td class="time-ago">15m ago</td>
+          </tr>
+          <tr>
+            <td><span class="ticket-id">TKT-8844</span></td>
+            <td style="font-weight:500">Sara Malik</td>
+            <td><span class="badge b-ind">💬 WhatsApp</span></td>
+            <td><span class="badge b-slate">Bug Report</span></td>
+            <td><span class="badge b-em">Resolved</span></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="sentiment-bar"><div class="sentiment-fill" style="width:68%; background:#F59E0B"></div></div>
+                <span style="font-size:11px; color:var(--text3); font-family:var(--font-mono)">0.68</span>
+              </div>
+            </td>
+            <td class="time-ago">31m ago</td>
+          </tr>
+          <tr>
+            <td><span class="ticket-id">TKT-8843</span></td>
+            <td style="font-weight:500">Ali Raza</td>
+            <td><span class="badge b-em">📧 Email</span></td>
+            <td><span class="badge b-slate">General</span></td>
+            <td><span class="badge b-em">Resolved</span></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="sentiment-bar"><div class="sentiment-fill" style="width:88%; background:#10B981"></div></div>
+                <span style="font-size:11px; color:var(--text3); font-family:var(--font-mono)">0.88</span>
+              </div>
+            </td>
+            <td class="time-ago">44m ago</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CEO BRIEFING -->
+    <div class="briefing-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+        <div>
+          <div class="briefing-title">📋 Monday Morning CEO Briefing</div>
+          <div class="briefing-date">Generated: Mon, 17 March 2026 · 08:00 PKT · auto-generated by ARIA</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sm btn-sm-ghost">↓ PDF</button>
+          <button class="btn-sm btn-sm-em">Generate Now</button>
+        </div>
+      </div>
+      <div class="briefing-grid">
+        <div class="b-metric"><div class="b-metric-val">$8,420</div><div class="b-metric-lbl">Revenue This Week</div></div>
+        <div class="b-metric"><div class="b-metric-val" style="color:var(--ind)">1,284</div><div class="b-metric-lbl">Total Tickets</div></div>
+        <div class="b-metric"><div class="b-metric-val" style="color:var(--amber)">4.9%</div><div class="b-metric-lbl">Escalation Rate</div></div>
+      </div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.75; border-top: 1px solid var(--border); padding-top: 16px;">
+        <strong style="color:var(--text)">Executive Summary:</strong> ARIA processed 1,284 tickets this week with a 95.1% autonomous resolution rate. Response time improved 14.8% to 2.3s avg. WhatsApp remains the dominant channel (52%). One critical escalation (data breach concern) resolved within 2h by human team. <span style="color:var(--em)">Recommend reviewing billing inquiry scripts — 31% of escalations were pricing-related.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TICKET STATUS ═══════════════════════════════════ -->
+<div class="page" id="page-status">
+  <div class="status-page">
+    <div class="status-header">
+      <div class="refresh-bar">
+        <span>Auto-refreshing</span>
+        <div class="refresh-progress"><div class="refresh-fill"></div></div>
+        <span>every 15 seconds</span>
+      </div>
+      <h2>Ticket Status</h2>
+      <div class="ticket-meta">
+        <span class="ticket-id" style="font-size:16px; font-weight:700; color: var(--em)">TKT-8847</span>
+        <span class="badge b-amb">⟳ Processing</span>
+        <span class="badge b-ind">💬 WhatsApp</span>
+        <span style="font-size:12px; color:var(--text3)">Opened 2 min ago</span>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-card-header">
+        <div class="s-field">
+          <div class="s-label">Subject</div>
+          <div class="s-val">Cannot reset my password — email link not working</div>
+        </div>
+        <div style="display:flex; gap:24px; flex-shrink:0; margin-left:24px;">
+          <div class="s-field">
+            <div class="s-label">Customer</div>
+            <div class="s-val">Hassaan Ahmed</div>
+          </div>
+          <div class="s-field">
+            <div class="s-label">Sentiment</div>
+            <div class="s-val" style="color:var(--em); display:flex; align-items:center; gap:6px;">
+              😊 <span class="mono">0.82</span>
+            </div>
+          </div>
+          <div class="s-field">
+            <div class="s-label">Category</div>
+            <div class="s-val">Technical</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="conversation">
+        <div class="msg customer">
+          <div class="msg-avatar av-customer">👤</div>
+          <div>
+            <div class="msg-bubble">Hey, I'm trying to reset my password but the link in the email doesn't work. I've tried 3 times already. Very frustrated right now.</div>
+            <div class="msg-time">16:40 · WhatsApp</div>
+          </div>
+        </div>
+
+        <div class="msg agent">
+          <div class="msg-avatar av-agent">🤖</div>
+          <div>
+            <div class="msg-bubble">I completely understand your frustration — this is the last thing you need when you're trying to get into your account! 🙏<br><br>Password reset links expire after 24 hours and can only be used once. Here's what to do:<br><br>1️⃣ Go to the login page and click *Forgot Password* again<br>2️⃣ Enter your email — a fresh link will be sent instantly<br>3️⃣ Check your spam folder if it doesn't arrive in 2 mins<br><br>Your new link will be valid for 24 hours. Let me know if you hit any issues! 💬 Type *human* for live support.</div>
+            <div class="msg-time">ARIA · 16:41 · 1.8s response · WhatsApp</div>
+          </div>
+        </div>
+
+        <div class="msg customer">
+          <div class="msg-avatar av-customer">👤</div>
+          <div>
+            <div class="msg-bubble">oh it worked! thank you so much. that was super fast 🙌</div>
+            <div class="msg-time">16:43 · WhatsApp</div>
+          </div>
+        </div>
+
+        <div class="msg agent">
+          <div class="msg-avatar av-agent">🤖</div>
+          <div>
+            <div class="msg-bubble">Glad to hear that! Your account is all set. 🎉 If you ever need anything else, we're here 24/7. Have a great day!</div>
+            <div class="msg-time">ARIA · 16:43 · 1.2s response · WhatsApp</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div style="padding: 0 24px 24px;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px;">Activity Timeline</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--em);flex-shrink:0;margin-top:4px;"></div>
+            <div style="font-size:12px;"><span style="color:var(--text)">Ticket TKT-8847 created</span> <span style="color:var(--text3)">· 16:40</span></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--ind);flex-shrink:0;margin-top:4px;"></div>
+            <div style="font-size:12px;"><span style="color:var(--text)">KB search executed: "password reset"</span> <span style="color:var(--text3)">· 16:40</span></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--em);flex-shrink:0;margin-top:4px;"></div>
+            <div style="font-size:12px;"><span style="color:var(--text)">ARIA response sent via WhatsApp (1.8s)</span> <span style="color:var(--text3)">· 16:41</span></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--em);flex-shrink:0;margin-top:4px;"></div>
+            <div style="font-size:12px;"><span style="color:var(--text)">Customer confirmed resolution · Ticket closing</span> <span style="color:var(--text3)">· 16:43</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:24px;">
+      <p style="color:var(--text3); font-size:13px; margin-bottom:16px;">Need further help?</p>
+      <button class="btn-primary" onclick="showPage('support')">Submit Another Request →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Page navigation
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  // update nav
+  const map = { landing: 0, support: 1, dashboard: 2, status: 3 };
+  const btns = document.querySelectorAll('.nav-btn');
+  if (map[page] !== undefined) btns[map[page]].classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// Multi-step form
+let currentStep = 1;
+function nextStep(from) {
+  if (from === 3) { submitForm(); return; }
+  goStep(from + 1);
+}
+function prevStep(from) { goStep(from - 1); }
+function goStep(to) {
+  currentStep = to;
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + to).classList.add('active');
+  // update progress
+  const steps = document.querySelectorAll('.prog-step');
+  steps.forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i + 1 < to) s.classList.add('done');
+    if (i + 1 === to) s.classList.add('active');
+  });
+  const fills = [0, 50, 100];
+  document.getElementById('progress-fill').style.width = fills[to - 1] + '%';
+}
+
+function updateCharCount(el) {
+  document.getElementById('char-count').textContent = el.value.length;
+}
+
+function selectCat(el) {
+  document.querySelectorAll('.cat-opt').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectPrio(el, prio) {
+  document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function submitForm() {
+  // Hide steps, show success
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('success-card').style.display = 'block';
+  document.getElementById('gen-ticket-id').textContent = Math.floor(8800 + Math.random() * 100);
+  // Progress to 100%
+  document.getElementById('progress-fill').style.width = '100%';
+  document.querySelectorAll('.prog-step').forEach(s => s.classList.add('done'));
+}
+
+function resetForm() {
+  document.getElementById('success-card').style.display = 'none';
+  currentStep = 1;
+  goStep(1);
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-message').value = '';
+  document.getElementById('char-count').textContent = '0';
+  document.getElementById('progress-fill').style.width = '0%';
+  document.querySelectorAll('.prog-step').forEach((s,i) => {
+    s.classList.remove('done');
+    if (i === 0) s.classList.add('active');
+    else s.classList.remove('active');
+  });
+  document.getElementById('step1').classList.add('active');
+}
+
+// Animate KPI numbers on dashboard load
+function animateNumbers() {
+  const targets = [{el: document.querySelector('.kpi-val.k-em'), end: 247, suffix: ''},
+    {el: document.querySelector('.kpi-val.k-ind'), end: 14, suffix: ''},
+    {el: document.querySelectorAll('.kpi-val')[2], end: 2.3, suffix: 's', decimal: true},
+    {el: document.querySelectorAll('.kpi-val')[3], end: 4.9, suffix: '%', decimal: true}];
+  targets.forEach(t => {
+    if (!t.el) return;
+    let start = 0, duration = 1200, startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const val = t.decimal ? (progress * t.end).toFixed(1) : Math.floor(progress * t.end);
+      t.el.textContent = val + t.suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// Observe dashboard page
+const observer = new MutationObserver(() => {
+  if (document.getElementById('page-dashboard').classList.contains('active')) animateNumbers();
+});
+observer.observe(document.getElementById('page-dashboard'), { attributes: true, attributeFilter: ['class'] });
+</script>
+</body>
+</html>

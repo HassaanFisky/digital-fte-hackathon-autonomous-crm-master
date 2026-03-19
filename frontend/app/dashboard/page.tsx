@@ -102,7 +102,7 @@ export default function Dashboard() {
     return markdown
       .replace(/#{1,6}\s+/g, '')
       .replace(/\*\*/g, '')
-      .replace(/\*/g, '')
+      .replace(/[*]/g, '')
       .replace(/\n+/g, ' ')
       .trim()
       .slice(0, 250);
@@ -171,36 +171,41 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         <div className="lg:col-span-2 p-8 rounded-2xl bg-slate-900 border border-slate-800">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-lg font-bold">Sentiment Trend</h3>
-              <p className="text-xs text-slate-500">Weekly customer satisfaction overview</p>
+              <h3 className="text-lg font-bold mb-1">Sentiment Velocity</h3>
+              <p className="text-xs text-slate-500">Real-time mood analysis across all channels</p>
             </div>
-            <div className="flex gap-2">
-              <button className="px-3 py-1 rounded-md bg-slate-800 text-[10px] font-bold uppercase tracking-tighter">7D</button>
-              <button className="px-3 py-1 rounded-md hover:bg-slate-800 text-[10px] font-bold uppercase tracking-tighter text-slate-500">30D</button>
+            <div className="flex items-center gap-4 text-xs font-bold">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-slate-400">Positive</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-slate-600" />
+                <span className="text-slate-400">Neutral</span>
+              </div>
             </div>
           </div>
-          <div className="h-[300px] w-full">
+          <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={sentimentData}>
                 <defs>
-                  <linearGradient id="colorSent" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="colorSentiment" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
                     <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#475569', fontSize: 12}} dy={10} />
-                <YAxis hide domain={[0, 1]} />
+                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 10, fontWeight: 'bold'}} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 10, fontWeight: 'bold'}} dx={-10} domain={[0, 1]} tickFormatter={(val) => `${val * 100}%`} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px' }}
-                  itemStyle={{ color: '#10b981', fontWeight: 'bold' }}
+                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold', color: '#f8fafc' }}
+                  itemStyle={{ color: '#10B981' }}
                 />
-                <Area type="monotone" dataKey="sentiment" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorSent)" />
+                <Area type="monotone" dataKey="sentiment" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorSentiment)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

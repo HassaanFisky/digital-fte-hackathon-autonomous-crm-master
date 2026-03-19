@@ -18,5 +18,6 @@ An enterprise-grade Autonomous CRM built for 100% cloud-native resilience. We’
 7. Run Frontend: `cd frontend && npm run dev`
 
 ## Live Details
+
 - **Live URL**: https://digital-fte-hackathon.vercel.app (Pending Vercel deployment update)
 - **Status**: Production-Ready
