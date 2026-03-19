@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+node_modules/
+.next/
+*.log
+*.pid
+credentials/gmail_token.json
+credentials/gmail_credentials.json
+session_data/
+whatsapp_session/
+.DS_Store
