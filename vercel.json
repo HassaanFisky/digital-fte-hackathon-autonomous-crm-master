@@ -1,9 +1,18 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && npm run build",
+  "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/.next",
   "framework": "nextjs",
   "installCommand": "cd frontend && npm install",
+  "functions": {
+    "api/main.py": {
+      "runtime": "vercel-python@3.0.8",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "api/main.py" }
+  ],
   "env": {
     "NEXT_PUBLIC_API_URL": "@api_url"
   },

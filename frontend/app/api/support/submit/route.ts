@@ -5,7 +5,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     
     // Proxy request to the Python backend
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const backendUrl = process.env.BACKEND_URL 
+      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:8000');
     const response = await fetch(`${backendUrl}/api/v1/channels/webform/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
