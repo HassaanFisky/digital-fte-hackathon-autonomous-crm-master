@@ -1,23 +1,31 @@
-# Digital FTE CRM — ARIA v2.0
+# ARIA — Digital FTE | AI Customer Success Platform
 
-An enterprise-grade Autonomous CRM built for 100% cloud-native resilience. We’re talking a distributed agentic backbone with a self-healing logic controller and high-dimensional PostgreSQL memory. Everything is orchestrated asynchronously and deployed via Vercel for global low-latency. It’s high-end, zero-lag, and strictly production-ready.
+## Live URLs
+- **Backend (Koyeb)**: [Deploying...]
+- **Frontend (Vercel)**: [Deploying...]
 
 ## Architecture
-- **Frontend**: Next.js 14 App Router, Tailwind CSS, Framer Motion, shadcn/ui.
-- **Backend / Agent Core**: FastAPI, Groq LLaMA 3.3 70B, Kafka. 
-- **DB**: Neon PostgreSQL (`asyncpg`).
-- **Channels**: Web Form, SMS/WhatsApp (Twilio), Email (Gmail API).
+- **AI Engine**: Groq LLaMA 3.3 70B
+- **Database**: Neon PostgreSQL
+- **Event Streaming**: Confluent Kafka
+- **Messaging**: Twilio WhatsApp
+- **Frontend**: Next.js + Vercel
+- **Backend**: FastAPI + Koyeb
 
-### Setup Guide
-1. Clone the repository: `git clone https://github.com/HassaanFisky/digital-fte-hackathon-autonomous-crm-master.git`
-2. Install Python dependencies: `cd backend && pip install -r requirements.txt`
-3. Install Node.js dependencies: `cd frontend && npm install`
-4. Create `.env` file using `.env.example` as a template and provide your actual credentials.
-5. Initialize DB Schema: `cd backend && python init_db.py`
-6. Run Backend: `cd backend && uvicorn api.main:app --host 0.0.0.0 --port 8000`
-7. Run Frontend: `cd frontend && npm run dev`
+## Channels Supported
+1. Email (Gmail)
+2. WhatsApp (Twilio)
+3. Web Form
 
-## Live Details
+## Setup Instructions
+1. Clone the repository
+2. Add `.env` file with credentials
+3. Install backend dependencies: `pip install -r backend/requirements.txt`
+4. Install frontend dependencies: `cd frontend && npm install`
+5. Deploy frontend to Vercel
 
-- **Live URL**: https://digital-fte-hackathon.vercel.app (Pending Vercel deployment update)
-- **Status**: Production-Ready
+## API Documentation
+Swagger UI available at: `/docs` (when backend is running)
+
+## GIAIC Hackathon 5
+Submitted for GIAIC Hackathon 5.

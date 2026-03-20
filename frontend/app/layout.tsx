@@ -1,31 +1,19 @@
-import type { Metadata } from "next";
-import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
-const syne = Syne({ 
-  subsets: ["latin"],
-  weight: ['400', '600', '700', '800'],
-  variable: '--font-head',
-});
-
-const dmSans = DM_Sans({ 
-  subsets: ["latin"],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-body',
-});
-
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ["latin"],
-  variable: '--font-mono',
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ARIA — Digital FTE | My AI Success Employee",
-  description: "24/7 AI-powered customer support autonomously handles tickets across all channels.",
-  icons: {
-    icon: "https://emojicdn.elk.sh/🤖",
-  },
+  title: "ARIA — Digital FTE | AI Customer Success",
+  description: "24/7 autonomous support agent handled via Email, WhatsApp, and Web.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0F172A",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -34,20 +22,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark scroll-smooth ${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-bg text-text font-body antialiased selection:bg-em/30 selection:text-em font-normal">
-        <Toaster 
-          position="top-right" 
-          toastOptions={{
-            style: {
-              background: '#141F33',
-              color: '#F0F6FF',
-              border: '1px solid #1E3050',
-            },
-          }}
-        />
-        {/* Removed max-width from layout to let page.tsx handle centering of content while maintaining full-width backgrounds */}
+    <html lang="en">
+      <head>
+        <link rel="icon" href="https://emojicdn.elk.sh/🤖" />
+      </head>
+      <body className={`${inter.className} bg-slate-950 text-text-primary min-h-screen antialiased selection:bg-emerald-500/30`}>
         {children}
+        <Toaster position="bottom-right" toastOptions={{
+          style: {
+            background: "#1E293B",
+            color: "#F8FAFC",
+            border: "1px solid #334155"
+          }
+        }} />
       </body>
     </html>
   );

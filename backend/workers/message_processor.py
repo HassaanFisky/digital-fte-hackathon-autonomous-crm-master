@@ -1,70 +1,73 @@
-import asyncio, os, json, logging
-from datetime import datetime
-from kafka_client import create_consumer, TOPICS
+import asyncio
+import json
+from database import queries
+from kafka_client import create_consumer
 from agent.crm_agent import run_agent
-from database.queries import (
-    upsert_customer, create_conversation, get_active_conversation,
-    create_message, get_conversation_messages, record_metric
-)
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("MessageProcessor")
+class UnifiedMessageProcessor:
+    def __init__(self, group_id="aria-worker-group"):
+        self.group_id = group_id
 
-async def process_message(message: dict):
-    start = datetime.now()
-    channel = message.get("channel", "web_form")
-    content = message.get("content", "")
-    
-    try:
-        customer_id = await upsert_customer(
-            email=message.get("customer_email"),
-            phone=message.get("customer_phone"),
-            name=message.get("customer_name", "Customer")
+    async def start(self):
+        consumer = await create_consumer(["fte.tickets.incoming"], self.group_id)
+        await consumer.start()
+        
+        print(f"UnifiedMessageProcessor started on group {self.group_id}")
+        
+        try:
+            async for msg in consumer:
+                try:
+                    event = json.loads(msg.value.decode('utf-8'))
+                    await self.process_event(event)
+                except Exception as e:
+                    print(f"Error processing kafka event: {e}")
+                    # Log and continue as per instructions
+                    continue
+        finally:
+            await consumer.stop()
+
+    async def process_event(self, event):
+        customer_email = event.get("customer_contact") if "@" in str(event.get("customer_contact", "")) else None
+        customer_phone = event.get("customer_contact") if "@" not in str(event.get("customer_contact", "")) else None
+        
+        # Upsert customer
+        customer_id = await queries.upsert_customer(
+            email=customer_email,
+            phone=customer_phone,
+            name=event.get("name")
         )
         
-        conv = await get_active_conversation(customer_id)
+        # Get or create conversation (run_agent handles some of this, but we'll do it manually)
+        conv = await queries.get_active_conversation(customer_id)
         if not conv:
-            conv_id = await create_conversation(customer_id, channel)
+            conversation_id = await queries.create_conversation(customer_id, event.get("channel"))
         else:
-            conv_id = str(conv["id"])
+            conversation_id = str(conv['id'])
+            
+        # Get history
+        history = await queries.get_conversation_messages(conversation_id)
+        # Format as list for run_agent
+        formatted_history = [{"role": m['role'], "content": m['content']} for m in history]
         
-        await create_message(conv_id, channel, "inbound", "customer", content,
-                             channel_message_id=message.get("channel_message_id"))
-        
-        history = await get_conversation_messages(conv_id, limit=10)
-        formatted_history = [
-            {"role": "assistant" if m["role"] == "agent" else "user", "content": m["content"]}
-            for m in reversed(history)
-        ]
-        
-        customer_contact = message.get("customer_email") or message.get("customer_phone", "")
-        
+        # Run AI agent
         result = await run_agent(
             customer_id=customer_id,
-            channel=channel,
-            content=content,
-            customer_contact=customer_contact,
-            subject=message.get("subject", "Customer Support Request"),
+            channel=event.get("channel"),
+            content=event.get("content"),
+            customer_contact=event.get("customer_contact"),
+            subject=event.get("subject", "Inquiry from Web Form"),
             conversation_history=formatted_history
         )
         
-        latency = int((datetime.now() - start).total_seconds() * 1000)
-        logger.info(f"✅ Processed {channel} message | Latency: {latency}ms | Escalated: {result['escalated']}")
-        await record_metric("messages_processed", 1, channel)
+        # Log result
+        await queries.log_audit("agent_run", target=customer_id, parameters={
+            "channel": event.get("channel"),
+            "ticket_id": result.get("ticket_id"),
+            "escalated": result.get("escalated")
+        })
         
-    except Exception as e:
-        logger.error(f"❌ Processing error: {e}")
-
-async def main():
-    logger.info("🚀 Message Processor starting...")
-    consumer = create_consumer([TOPICS["tickets_incoming"]], "fte-processor-main")
-    await consumer.start()
-    logger.info("✅ Connected to Confluent Kafka — listening for tickets...")
-    try:
-        async for msg in consumer:
-            asyncio.create_task(process_message(msg.value))
-    finally:
-        await consumer.stop()
+        print(f"Processed message for customer {customer_id} on channel {event.get('channel')}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    processor = UnifiedMessageProcessor()
+    asyncio.run(processor.start())

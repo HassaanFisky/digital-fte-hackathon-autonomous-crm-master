@@ -1,59 +1,64 @@
 import os
-import json
 import asyncio
 from openai import AsyncOpenAI
-import datetime
 
-groq_client = AsyncOpenAI(
-    api_key=os.getenv("GROQ_API_KEY"),
-    base_url=os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
-)
-MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-VAULT_PATH = os.getenv("VAULT_PATH", "./vault")
+class RalphWiggumLoop:
+    def __init__(self, group_id="ralph-watcher-group"):
+        self.group_id = group_id
+        self.client = AsyncOpenAI(
+            api_key=os.getenv("GROQ_API_KEY"),
+            base_url=os.getenv("GROQ_BASE_URL")
+        )
 
-async def run_until_complete(task_id: str, prompt: str, max_iterations=10):
-    os.makedirs(f"{VAULT_PATH}/Logs", exist_ok=True)
-    os.makedirs(f"{VAULT_PATH}/Done", exist_ok=True)
-    log_file = f"{VAULT_PATH}/Logs/ralph_{task_id}.jsonl"
-    
-    messages = [
-        {"role": "system", "content": "You are Ralph, an autonomous reasoning loop. Output your thoughts. When you are truly finished with the task, you MUST conclude your entire response with exactly the phrase: TASK_COMPLETE"},
-        {"role": "user", "content": prompt}
-    ]
-    
-    iterations = 0
-    failures = 0
-    while iterations < max_iterations:
-        iterations += 1
-        try:
-            response = await groq_client.chat.completions.create(
-                model=MODEL,
-                messages=messages,
-                temperature=0.3,
-                max_tokens=2048
-            )
-            content = response.choices[0].message.content or ""
+    async def run_until_complete(self, task_id, prompt, max_iterations=10) -> bool:
+        """
+        Self-healing loop that iterates on a task until completion or failure.
+        """
+        current_context = ""
+        iteration = 0
+        
+        # Log to file
+        log_file = f"e:/logs/ralph_{task_id}.log"
+        os.makedirs(os.path.dirname(log_file), exist_ok=True)
+        
+        with open(log_file, "a") as f:
+            f.write(f"--- Task {task_id} started ---\n")
             
-            with open(log_file, "a") as f:
-                f.write(json.dumps({"iteration": iterations, "output": content}) + "\n")
-            
-            if "TASK_COMPLETE" in content:
-                done_file = f"{VAULT_PATH}/Done/{task_id}.md"
-                with open(done_file, "w") as df:
-                    df.write(f"# Task {task_id} Complete\n\n```\n{content}\n```\n")
-                return True
+        while iteration < max_iterations:
+            try:
+                iteration += 1
+                messages = [
+                    {"role": "system", "content": "You are Ralph Wiggum, an autonomous watcher. Complete the task as requested. If the task is finished, output 'TASK_COMPLETE'. Otherwise, generate the next steps or instructions for improvement."},
+                    {"role": "user", "content": f"Previous iteration context: {current_context}\nTask prompt: {prompt}"}
+                ]
                 
-            messages.append({"role": "assistant", "content": content})
-            messages.append({"role": "user", "content": "The task is not yet complete. Please continue your reasoning and provide next steps or final answer. If finished say TASK_COMPLETE."})
-        except Exception as e:
-            failures += 1
-            if failures >= 3:
-                error_file = f"{VAULT_PATH}/Logs/ERRORS.md"
-                with open(error_file, "a") as ef:
-                    ef.write(f"[{datetime.datetime.now().isoformat()}] Task {task_id} failed after 3 retries: {str(e)}\n")
-                return False
+                response = await self.client.chat.completions.create(
+                    model=os.getenv("GROQ_MODEL"),
+                    messages=messages,
+                    temperature=0.3,
+                    max_tokens=2048
+                )
                 
-    return False
-
-if __name__ == "__main__":
-    asyncio.run(run_until_complete("test_task", "Figure out how to deploy to vercel headless."))
+                output = response.choices[0].message.content
+                
+                with open(log_file, "a") as f:
+                    f.write(f"--- Iteration {iteration} ---\n{output}\n")
+                
+                if "TASK_COMPLETE" in output:
+                    print(f"Task {task_id} completed successfully after {iteration} iterations.")
+                    return True
+                    
+                # Re-inject previous output as context for next
+                current_context = output
+                
+            except Exception as e:
+                print(f"Ralph Wiggum iteration {iteration} failure: {e}")
+                if iteration >= 3:
+                    error_log = f"c:/logs/ralph_ERRORS.log"
+                    os.makedirs(os.path.dirname(error_log), exist_ok=True)
+                    with open(error_log, "a") as f:
+                        f.write(f"Task {task_id} failed at iteration {iteration}: {e}\n")
+                    return False
+        
+        print(f"Task {task_id} reached max iterations ({max_iterations}) without completion.")
+        return False

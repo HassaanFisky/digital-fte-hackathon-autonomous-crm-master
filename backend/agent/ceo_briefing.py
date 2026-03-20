@@ -1,71 +1,62 @@
 import os
-import asyncio
-import datetime
+import json
+from datetime import datetime, timedelta
 from openai import AsyncOpenAI
-from database.queries import get_channel_metrics_last_24h
-from database.connection import close_db_pool
+from database import queries, connection
 
-groq_client = AsyncOpenAI(
-    api_key=os.getenv("GROQ_API_KEY"),
-    base_url=os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
-)
-MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-VAULT_PATH = os.getenv("VAULT_PATH", "./vault")
-
-from agent.prompts import CEO_BRIEFING_SYSTEM_PROMPT
-
-async def generate_briefing():
-    os.makedirs(f"{VAULT_PATH}/Briefings", exist_ok=True)
-    os.makedirs(f"{VAULT_PATH}/Done", exist_ok=True)
-    
-    # Read Business Goals
-    try:
-        with open(f"{VAULT_PATH}/Business_Goals.md", "r") as f:
-            goals = f.read()
-    except:
-        goals = "No business goals defined."
+async def generate_briefing() -> str:
+    pool = await connection.get_db_pool()
+    async with pool.acquire() as conn:
+        # Get stats for last 7 days
+        period_end = datetime.now().date()
+        period_start = period_end - timedelta(days=7)
         
-    done_count = len([name for name in os.listdir(f"{VAULT_PATH}/Done") if os.path.isfile(os.path.join(f"{VAULT_PATH}/Done", name))]) if os.path.exists(f"{VAULT_PATH}/Done") else 0
-    try:
-        metrics = await get_channel_metrics_last_24h()
-    except:
-        metrics = "Metrics DB not connected."
+        # Total tickets
+        total_tickets = await conn.fetchval(
+            "SELECT COUNT(*) FROM tickets WHERE created_at > NOW() - interval '7 days'"
+        )
+        # Escalation count
+        escalation_count = await conn.fetchval(
+            "SELECT COUNT(*) FROM tickets WHERE status = 'escalated' AND created_at > NOW() - interval '7 days'"
+        )
+        # Average sentiment
+        avg_sentiment = await conn.fetchval(
+            "SELECT AVG(sentiment_score) FROM conversations WHERE started_at > NOW() - interval '7 days'"
+        )
+        # Top categories
+        top_categories = await conn.fetch(
+            "SELECT category, COUNT(*) as count FROM tickets WHERE created_at > NOW() - interval '7 days' GROUP BY category ORDER BY count DESC LIMIT 3"
+        )
         
-    prompt = f"Goals:\n{goals}\n\nTasks Done: {done_count}\n\nMetrics:\n{metrics}\n\nPlease generate the Monday Morning CEO Briefing."
-    
-    response = await groq_client.chat.completions.create(
-        model=MODEL,
-        messages=[
-            {"role": "system", "content": CEO_BRIEFING_SYSTEM_PROMPT},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.4
+        stats = {
+            "total_tickets": total_tickets or 0,
+            "escalation_count": escalation_count or 0,
+            "avg_sentiment": float(avg_sentiment or 0.5),
+            "top_categories": [dict(r) for r in top_categories]
+        }
+        
+    client = AsyncOpenAI(
+        api_key=os.getenv("GROQ_API_KEY"),
+        base_url=os.getenv("GROQ_BASE_URL")
     )
     
-    markdown_content = response.choices[0].message.content or ""
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
+    # Generate structured markdown with Groq
+    response = await client.chat.completions.create(
+        model=os.getenv("GROQ_MODEL"),
+        messages=[{
+            "role": "system",
+            "content": "You are a CEO Briefing Generator. Synthesize the provided support stats into a professional executive summary. Use markdown with sections: Executive Summary, KPIs, Wins, Bottlenecks, Recommendations."
+        }, {
+            "role": "user",
+            "content": f"Stats for {period_start} to {period_end}:\n{json.dumps(stats)}"
+        }],
+        temperature=0.3,
+        max_tokens=4096
+    )
     
-    briefing_file = f"{VAULT_PATH}/Briefings/{today}_Monday_Briefing.md"
-    with open(briefing_file, "w") as bf:
-        bf.write(markdown_content)
-        
-    # Update dashboard
-    db_file = f"{VAULT_PATH}/Dashboard.md"
-    try:
-        with open(db_file, "a") as f:
-            f.write(f"\n\n## Latest Briefing ({today})\n{markdown_content[:200]}...\n")
-    except:
-        pass
-        
-    # pseudo DB insert
-    from database.queries import save_briefing
-    try:
-        period_start = datetime.datetime.now() - datetime.timedelta(days=7)
-        await save_briefing(period_start, datetime.datetime.now(), markdown_content)
-    except:
-        pass
-        
-    print(f"Briefing generated successfully at {briefing_file}")
-
-if __name__ == "__main__":
-    asyncio.run(generate_briefing())
+    briefing_markdown = response.choices[0].message.content
+    
+    # Save to database
+    await queries.save_briefing(period_start, period_end, briefing_markdown, **stats)
+    
+    return briefing_markdown

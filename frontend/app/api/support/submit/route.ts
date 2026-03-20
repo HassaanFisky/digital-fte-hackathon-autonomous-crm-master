@@ -1,27 +1,22 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
     
-    // Proxy request to the Python backend
-    const backendUrl = process.env.BACKEND_URL 
-      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:8000');
-    const response = await fetch(`${backendUrl}/api/v1/channels/webform/submit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch(`${apiUrl}/api/v1/channels/webform/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      return NextResponse.json({ error: 'Backend submission failed', details: errorText }, { status: response.status });
-    }
-
     const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error: any) {
-    console.error('Submission error:', error);
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    return NextResponse.json(data, { status: response.status });
+  } catch (error) {
+    console.error("Submission Error:", error);
+    return NextResponse.json({ detail: "Internal Server Error" }, { status: 500 });
   }
 }
