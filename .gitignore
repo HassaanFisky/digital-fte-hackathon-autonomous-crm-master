@@ -13,3 +13,5 @@ credentials/gmail_credentials.json
 session_data/
 whatsapp_session/
 .DS_Store
+
+.vercel

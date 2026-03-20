@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ARIA — Digital FTE | AI Customer Success Platform",
+  title: "ARIA — Digital FTE | My AI Success Employee",
   description: "24/7 AI-powered customer support autonomously handles tickets across all channels.",
   icons: {
     icon: "https://emojicdn.elk.sh/🤖",
@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark scroll-smooth ${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-bg text-text font-body antialiased selection:bg-em/30 selection:text-em">
+      <body className="bg-bg text-text font-body antialiased selection:bg-em/30 selection:text-em font-normal">
         <Toaster 
           position="top-right" 
           toastOptions={{
@@ -46,11 +46,9 @@ export default function RootLayout({
             },
           }}
         />
-        <div className="max-w-[1100px] mx-auto px-6 w-full relative">
-          {children}
-        </div>
+        {/* Removed max-width from layout to let page.tsx handle centering of content while maintaining full-width backgrounds */}
+        {children}
       </body>
     </html>
   );
 }
-
