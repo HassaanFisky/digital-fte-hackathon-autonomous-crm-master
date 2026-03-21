@@ -1,25 +1,28 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, FileText } from "lucide-react";
+import { HeartHandshake, Sparkles, Sprout, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const features = [
   {
-    icon: Mail,
-    title: "Email Intelligence",
-    desc: "Monitors Gmail 24/7. Drafts and sends formal replies automatically.",
+    icon: Sparkles,
+    title: "Thoughtful Intelligence",
+    desc: "Aria reads every message with nuance, drafting responses that are deeply contextual and empathetic.",
+    color: "#FDF1E7"
   },
   {
-    icon: MessageSquare,
-    title: "WhatsApp Support",
-    desc: "Instant conversational responses via Twilio sandbox integration.",
+    icon: HeartHandshake,
+    title: "Human in the Loop",
+    desc: "Designed to collaborate. Your team retains full control while Aria handles the repetitive inquiries.",
+    color: "#EDF2EE"
   },
   {
-    icon: FileText,
-    title: "Web Form",
-    desc: "Structured intake with intelligent triage and priority detection.",
+    icon: Sprout,
+    title: "Organic Growth",
+    desc: "The system learns from your best agents, organically adapting to your unique voice and policies.",
+    color: "#F4EDFA"
   },
 ];
 
@@ -27,82 +30,60 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-      duration: 0.7,
-      ease: [0.16, 1, 0.3, 1]
-    }
+    transition: { staggerChildren: 0.1, delayChildren: 0.2, duration: 0.8 }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: [0.16, 1, 0.3, 1]
-    }
-  }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
 };
 
 export default function LandingPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-[#F5F0E8] text-[#1A1612] overflow-x-hidden">
+    <main className="flex min-h-screen flex-col bg-[#FAF9F6] text-[#2D2926] overflow-x-hidden">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center min-h-screen px-6 py-24 text-center overflow-hidden">
-        {/* Subtle radial gradient background */}
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,_#F5F0E8_0%,_#EDE8DF_100%)] opacity-50" />
-        
+      <section className="relative flex flex-col items-center justify-center min-h-[90vh] px-6 pt-32 pb-24 text-center">
         <motion.div 
-          className="relative max-w-5xl w-full z-10"
+          className="relative max-w-[800px] w-full z-10"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
-          {/* Label */}
           <motion.div variants={itemVariants} className="mb-8">
-            <span className="font-body font-bold text-[0.7rem] uppercase tracking-[0.15em] text-[#CC5500]">
-              INTELLIGENT SUPPORT INFRASTRUCTURE
+            <span className="text-[13px] font-medium tracking-wide text-[#8A857D] px-4 py-1.5 border border-[#E5E0D8] bg-white rounded-full shadow-sm">
+              Meet your new copilot
             </span>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1 
             variants={itemVariants} 
-            className="font-display font-black leading-[1.1] tracking-[-0.02em] mb-10"
-            style={{ fontSize: "clamp(3.5rem, 8vw, 5.5rem)" }}
+            className="font-serif text-5xl md:text-7xl font-normal tracking-tight mb-8 text-[#2D2926] text-pretty leading-[1.1]"
           >
-            <span className="text-[#1A1612]">Customer Support,</span>
-            <br />
-            <span className="text-[#CC5500]">Handled.</span>
+            Support that feels <br/>
+            <span className="italic text-[#D97757]">beautifully human.</span>
           </motion.h1>
 
-          {/* Subtext */}
           <motion.p 
             variants={itemVariants} 
-            className="font-body font-light text-[1.1rem] text-[#6B6459] max-w-[480px] mx-auto mb-12 tracking-wide leading-relaxed"
+            className="text-lg md:text-xl text-[#5C564D] max-w-[600px] mx-auto mb-12 leading-relaxed text-pretty"
           >
-            ARIA resolves every support ticket across Email, WhatsApp, and Web — autonomously, in under 3 seconds.
+            Aria bridges the gap between efficiency and empathy. 
+            Deploy intelligent agents that resolve tickets across all channels while preserving your brand's warmth.
           </motion.p>
 
-          {/* Buttons */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/support"
-              className="w-full sm:w-auto font-body font-bold px-10 py-4 bg-[#1A1612] text-[#FDFAF5] border-radius-[2px] transition-all duration-200 hover:bg-[#CC5500] hover:scale-[1.02] active:scale-[0.97]"
-              style={{ borderRadius: '2px' }}
+              className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-[#D97757] text-white font-medium text-[16px] rounded-xl transition-all hover:bg-[#C86444] active:scale-[0.98] shadow-sm"
             >
-              Start a Ticket →
+              Get Started
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/dashboard"
-              className="w-full sm:w-auto font-body font-bold px-10 py-4 bg-transparent text-[#1A1612] border-radius-[2px] border-1 border-[#1A1612] transition-all duration-200 hover:bg-[#1A1612] hover:text-[#FDFAF5] hover:scale-[1.02] active:scale-[0.97]"
-              style={{ borderRadius: '2px', border: '1px solid #1A1612' }}
+              className="w-full sm:w-auto px-8 py-3.5 bg-[#F0EBE1] text-[#4A4541] font-medium text-[16px] rounded-xl transition-all hover:bg-[#E5E0D8] active:scale-[0.98]"
             >
               View Dashboard
             </Link>
@@ -110,38 +91,32 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Features Section */}
-      <section className="w-full max-w-6xl mx-auto px-6 py-32 bg-[#F5F0E8]">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16"
-        >
-          <span className="font-body font-bold text-[0.7rem] uppercase tracking-[0.15em] text-[#CC5500]">
-            WHAT ARIA DOES
-          </span>
-        </motion.div>
-
+      <section className="w-full max-w-[1200px] mx-auto px-6 py-32 border-t border-[#E5E0D8]/60">
+        <div className="text-center mb-16">
+          <h2 className="font-serif text-3xl text-[#2D2926] mb-4">Thoughtful infrastructure</h2>
+          <p className="text-[#8A857D] max-w-[500px] mx-auto">Built with care to handle your most delicate customer interactions.</p>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map(({ icon: Icon, title, desc }, i) => (
+          {features.map(({ icon: Icon, title, desc, color }, i) => (
             <motion.div
               key={title}
-              initial={{ opacity: 0, y: 32 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
-              className="p-10 bg-[#EDE8DF] border border-[#DDD8CF] shadow-[0_1px_3px_rgba(26,22,18,0.06)] rounded-[4px] group transition-all duration-300 hover:translate-y-[-4px] hover:scale-[1.02] hover:shadow-[0_4px_24px_rgba(26,22,18,0.08)]"
-              style={{ borderRadius: '4px' }}
+              transition={{ delay: i * 0.1, duration: 0.6 }}
+              className="bg-white p-10 rounded-2xl border border-[#E5E0D8] shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow"
             >
-              <div className="mb-6">
-                <Icon className="w-6 h-6 text-[#CC5500] stroke-[1.5]" />
+              <div 
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6"
+                style={{ backgroundColor: color }}
+              >
+                <Icon className="w-6 h-6 text-[#2D2926]" strokeWidth={1.5} />
               </div>
-              <h3 className="font-display font-black text-2xl text-[#1A1612] mb-4">
+              <h3 className="text-xl font-serif text-[#2D2926] mb-3">
                 {title}
               </h3>
-              <p className="font-body font-light text-[0.95rem] text-[#6B6459] leading-relaxed">
+              <p className="text-[#5C564D] leading-relaxed">
                 {desc}
               </p>
             </motion.div>

@@ -1,17 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Lora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: '--font-serif',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: "ARIA — Digital FTE | AI Customer Success",
-  description: "24/7 autonomous support agent handled via Email, WhatsApp, and Web.",
+  title: "Aria — Intelligent Customer Infrastructure",
+  description: "Human-centered autonomous support platform.",
+  icons: {
+    icon: "https://emojicdn.elk.sh/✨",
+  }
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0F172A",
+  themeColor: "#FAF9F6",
   width: "device-width",
   initialScale: 1,
 };
@@ -22,19 +35,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" href="https://emojicdn.elk.sh/🤖" />
-      </head>
-      <body className={`${inter.className} bg-slate-950 text-text-primary min-h-screen antialiased selection:bg-emerald-500/30`}>
+    <html lang="en" className={`${inter.variable} ${lora.variable} selection:bg-[#D97757]/20 selection:text-[#D97757]`}>
+      <body className="font-sans bg-background text-foreground min-h-screen antialiased overflow-x-hidden">
+        <div className="fixed inset-0 pointer-events-none -z-10 bg-texture opacity-50" />
+        
         {children}
-        <Toaster position="bottom-right" toastOptions={{
-          style: {
-            background: "#1E293B",
-            color: "#F8FAFC",
-            border: "1px solid #334155"
-          }
-        }} />
+
+        <Toaster 
+          position="bottom-right" 
+          toastOptions={{
+            style: {
+              background: "#ffffff",
+              color: "#2D2926",
+              border: "1px solid #E5E0D8",
+              fontSize: "14px",
+              fontWeight: 500,
+              borderRadius: "12px",
+              padding: "16px",
+              boxShadow: "0 10px 40px -4px rgba(0, 0, 0, 0.08)",
+            },
+          }} 
+        />
       </body>
     </html>
   );
