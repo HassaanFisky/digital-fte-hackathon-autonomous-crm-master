@@ -7,23 +7,14 @@
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
   }
-}
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  html {
+    scroll-behavior: smooth;
   }
-  .animate-gradient {
-    background: linear-gradient(-45deg, #10B981, #6366F1, #F59E0B, #10B981);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+
+  ::selection {
+    background-color: rgba(16, 185, 129, 0.25);
+    color: #F8FAFC;
   }
 }
 
@@ -32,8 +23,10 @@ body {
   background: #0F172A;
 }
 
+/* Custom emerald scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -41,10 +34,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 4px;
+  background: #10B981;
+  border-radius: 999px;
+  opacity: 0.5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #34D399;
 }

@@ -4,24 +4,31 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import {
-  Send, CheckCircle2, AlertCircle, ChevronRight, ChevronLeft,
-  Info, LifeBuoy, CreditCard, MessageCircle, Bug
+  Send, CheckCircle2, ChevronRight, ChevronLeft,
+  Info, LifeBuoy, CreditCard, MessageCircle, Bug,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import Navbar from "@/components/Navbar";
 
 const categories = [
-  { id: "general",    label: "General Inquiry",       icon: Info },
-  { id: "technical",  label: "Technical Support",      icon: LifeBuoy },
-  { id: "billing",    label: "Billing & Subscriptions",icon: CreditCard },
-  { id: "feedback",   label: "Product Feedback",       icon: MessageCircle },
-  { id: "bug_report", label: "Report a Bug",           icon: Bug },
+  { id: "general",    label: "General",   icon: Info },
+  { id: "technical",  label: "Technical", icon: LifeBuoy },
+  { id: "billing",    label: "Billing",   icon: CreditCard },
+  { id: "feedback",   label: "Feedback",  icon: MessageCircle },
+  { id: "bug_report", label: "Bug",       icon: Bug },
 ];
 
 const priorities = [
-  { id: "low",    label: "Low",    color: "text-slate-400 bg-slate-400/10 border-slate-700 hover:border-slate-600" },
-  { id: "medium", label: "Medium", color: "text-amber-500 bg-amber-500/10 border-amber-700/50 hover:border-amber-500" },
-  { id: "high",   label: "High",   color: "text-red-500 bg-red-500/10 border-red-700/50 hover:border-red-500" },
+  { id: "low",    label: "Low",    active: "bg-slate-700 text-white border-slate-600" },
+  { id: "medium", label: "Medium", active: "bg-amber-500/20 text-amber-400 border-amber-500" },
+  { id: "high",   label: "High",   active: "bg-red-500/20 text-red-400 border-red-500" },
 ];
+
+const slideVariants = {
+  enter: { x: 40, opacity: 0 },
+  center: { x: 0, opacity: 1 },
+  exit: { x: -40, opacity: 0 },
+};
 
 export default function SupportPage() {
   const router = useRouter();
@@ -29,6 +36,7 @@ export default function SupportPage() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [ticketId, setTicketId] = useState("");
+  const [direction, setDirection] = useState(1);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -39,23 +47,31 @@ export default function SupportPage() {
     message: "",
   });
 
-  const nextStep = () => {
+  const goNext = () => {
     if (step === 1) {
-      if (!formData.name || !formData.email.includes("@")) {
-        toast.error("Please provide valid contact details.");
+      if (!formData.name.trim()) {
+        toast.error("Please enter your name.");
+        return;
+      }
+      if (!formData.email.includes("@")) {
+        toast.error("Please enter a valid email.");
         return;
       }
     }
     if (step === 2) {
-      if (!formData.subject) {
-        toast.error("Please provide a subject line.");
+      if (!formData.subject.trim()) {
+        toast.error("Please enter a subject.");
         return;
       }
     }
-    setStep(step + 1);
+    setDirection(1);
+    setStep((s) => s + 1);
   };
 
-  const prevStep = () => setStep(step - 1);
+  const goBack = () => {
+    setDirection(-1);
+    setStep((s) => s - 1);
+  };
 
   const handleSubmit = async () => {
     if (formData.message.length < 10) {
@@ -71,9 +87,9 @@ export default function SupportPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        setSubmitted(true);
         setTicketId("WEB-" + Math.random().toString(36).substr(2, 9).toUpperCase());
-        toast.success("Request submitted successfully!");
+        setSubmitted(true);
+        toast.success("Ticket submitted!");
       } else {
         toast.error(data.detail || "Submission failed.");
       }
@@ -84,29 +100,63 @@ export default function SupportPage() {
     }
   };
 
+  // ─── Success state ────────────────────────────────────────────────
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.92, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-slate-800 border border-slate-700 p-10 rounded-3xl max-w-md w-full text-center"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-sm w-full text-center"
         >
-          <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          {/* Checkmark ring */}
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+            className="w-20 h-20 bg-emerald-500/10 border-2 border-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8"
+          >
             <CheckCircle2 className="text-emerald-500 w-10 h-10" />
-          </div>
-          <h2 className="text-3xl font-bold mb-4">Request Sent!</h2>
-          <p className="text-text-muted mb-8 leading-relaxed">
-            Your support request has been logged. ARIA is analysing it right now.
-          </p>
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-700 mb-8 font-mono text-sm">
-            <span className="text-text-muted">Ticket ID:</span>{" "}
-            <span className="text-emerald-500">{ticketId}</span>
-          </div>
-          <div className="flex flex-col gap-3">
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
+            className="text-3xl font-extrabold text-white mb-3"
+          >
+            Ticket Received
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28, duration: 0.5, ease: "easeOut" }}
+            className="text-slate-400 text-base mb-8 leading-relaxed"
+          >
+            ARIA will respond within 5 minutes.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.36, duration: 0.5, ease: "easeOut" }}
+            className="bg-slate-800 border border-slate-700 rounded-2xl px-6 py-4 mb-8 font-mono text-sm"
+          >
+            <span className="text-slate-500">Ticket # </span>
+            <span className="text-emerald-400 font-bold">{ticketId}</span>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.44 }}
+            className="flex flex-col gap-3"
+          >
             <button
               onClick={() => router.push(`/support/status/${ticketId}`)}
-              className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-all"
+              className="w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl transition-colors duration-200"
             >
               Track Status →
             </button>
@@ -116,232 +166,259 @@ export default function SupportPage() {
                 setSubmitted(false);
                 setFormData({ ...formData, subject: "", message: "" });
               }}
-              className="text-text-muted hover:text-white transition-colors"
+              className="text-slate-500 hover:text-slate-300 text-sm transition-colors duration-200"
             >
               Submit Another
             </button>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     );
   }
 
+  // ─── Form ─────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen py-20 px-4">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <Link
-            href="/"
-            className="inline-block mb-6 text-text-muted hover:text-white transition-colors"
-          >
-            ← Back to Home
-          </Link>
-          <h1 className="text-4xl font-extrabold mb-4">Support Center</h1>
-          <p className="text-text-muted">ARIA is ready to assist you. 🌐 Web Form</p>
-        </div>
+    <div className="min-h-screen bg-slate-950 flex flex-col">
+      <Navbar />
 
-        {/* Progress Bar */}
-        <div className="w-full h-1 bg-slate-800 rounded-full mb-12">
-          <motion.div
-            initial={{ width: "33.3%" }}
-            animate={{ width: `${(step / 3) * 100}%` }}
-            className="h-full bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-          />
-        </div>
-
-        <div className="bg-slate-800 border border-slate-700 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-          <AnimatePresence mode="wait">
-            {step === 1 && (
-              <motion.div
-                key="step1"
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
-                className="space-y-6"
-              >
-                <h2 className="text-2xl font-bold">Step 1: Contact Details</h2>
-                <div className="space-y-4">
-                  <div className="relative group">
-                    <label className="block text-xs font-bold uppercase tracking-widest text-text-muted group-focus-within:text-emerald-500 transition-colors mb-1">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Enter your full name"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 font-medium transition-all"
-                    />
-                  </div>
-                  <div className="relative group">
-                    <label className="block text-xs font-bold uppercase tracking-widest text-text-muted group-focus-within:text-emerald-500 transition-colors mb-1">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="your@email.com"
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 font-medium transition-all"
-                      />
-                      {formData.email.includes("@") && (
-                        <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 w-5 h-5" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 2 && (
-              <motion.div
-                key="step2"
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
-                className="space-y-8"
-              >
-                <h2 className="text-2xl font-bold">Step 2: Request Details</h2>
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-1">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      placeholder="What can we help you with?"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 font-medium transition-all"
-                    />
-                  </div>
-
-                  <div className="space-y-4">
-                    <label className="block text-xs font-bold uppercase tracking-widest text-text-muted">
-                      Category
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {categories.map((cat) => {
-                        const Icon = cat.icon;
-                        const isActive = formData.category === cat.id;
-                        return (
-                          <button
-                            key={cat.id}
-                            onClick={() => setFormData({ ...formData, category: cat.id })}
-                            className={`flex items-center p-4 rounded-xl border transition-all ${
-                              isActive
-                                ? "bg-emerald-500/10 border-emerald-500 text-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
-                                : "bg-slate-950 border-slate-700 text-text-muted hover:border-slate-500"
-                            }`}
-                          >
-                            <Icon className="w-5 h-5 mr-3" />
-                            <span className="font-bold text-sm">{cat.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <label className="block text-xs font-bold uppercase tracking-widest text-text-muted">
-                      Priority
-                    </label>
-                    <div className="flex gap-4">
-                      {priorities.map((p) => {
-                        const isActive = formData.priority === p.id;
-                        return (
-                          <button
-                            key={p.id}
-                            onClick={() => setFormData({ ...formData, priority: p.id })}
-                            className={`flex-1 p-4 rounded-xl border text-center font-bold relative transition-all ${p.color} ${
-                              isActive ? "ring-2 ring-inset ring-current scale-[1.02]" : "opacity-60 grayscale"
-                            }`}
-                          >
-                            {p.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
-                className="space-y-6"
-              >
-                <h2 className="text-2xl font-bold">Step 3: Message</h2>
-                <div className="relative">
-                  <textarea
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder={
-                      formData.category === "bug_report"
-                        ? "Describe the bug, steps to reproduce, and expected vs actual behavior..."
-                        : formData.category === "billing"
-                        ? "What's wrong with your subscription or payment?"
-                        : "Explain your request in detail..."
-                    }
-                    rows={8}
-                    maxLength={1000}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-2xl p-6 focus:outline-none focus:border-emerald-500 font-medium transition-all resize-none"
-                  />
-                  <div className="absolute bottom-4 right-6 text-xs text-text-muted">
-                    {formData.message.length}/1000
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Navigation Buttons */}
-          <div className="mt-10 flex justify-between items-center gap-4">
-            {step > 1 ? (
-              <button
-                onClick={prevStep}
-                className="flex items-center px-6 py-4 border border-slate-700 hover:bg-slate-700/50 rounded-xl transition-all font-bold group"
-              >
-                <ChevronLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-                Back
-              </button>
-            ) : (
-              <div />
-            )}
-
-            {step < 3 ? (
-              <button
-                onClick={nextStep}
-                className="flex items-center ml-auto px-8 py-4 bg-white text-slate-950 hover:bg-slate-100 rounded-xl transition-all font-bold group"
-              >
-                Next Step
-                <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="flex items-center ml-auto px-10 py-4 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl transition-all font-bold shadow-[0_0_20px_rgba(16,185,129,0.4)] disabled:opacity-50 disabled:grayscale"
-              >
-                {loading ? "Sending..." : "Submit Request"}
-                <Send className="w-5 h-5 ml-2" />
-              </button>
-            )}
+      <div className="flex-1 flex items-center justify-center px-6 pt-24 pb-16">
+        <div className="w-full max-w-lg">
+          {/* Step dots */}
+          <div className="flex items-center justify-center gap-3 mb-12">
+            {[1, 2, 3].map((dot) => (
+              <div
+                key={dot}
+                className={`rounded-full transition-all duration-300 ${
+                  dot === step
+                    ? "w-6 h-2.5 bg-emerald-500"
+                    : dot < step
+                    ? "w-2.5 h-2.5 bg-emerald-500/40"
+                    : "w-2.5 h-2.5 bg-slate-700"
+                }`}
+              />
+            ))}
           </div>
-        </div>
 
-        {/* Info Box */}
-        <div className="mt-12 p-6 bg-slate-900/50 border border-slate-800 rounded-2xl flex items-start gap-4">
-          <AlertCircle className="w-6 h-6 text-emerald-500 flex-shrink-0" />
-          <p className="text-sm text-text-muted leading-relaxed">
-            This form uses ARIA (Autonomous Response &amp; Intelligence Agent). Responses are
-            generated instantly after analysis. For urgent matters, set priority to High.
+          {/* Card */}
+          <div className="bg-slate-800 border border-slate-700 rounded-3xl p-8 overflow-hidden relative">
+            <AnimatePresence mode="wait" custom={direction}>
+              {/* ── Step 1 ── */}
+              {step === 1 && (
+                <motion.div
+                  key="step1"
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-1">Who are you?</h2>
+                    <p className="text-slate-400 text-sm">We'll use this to follow up with you.</p>
+                  </div>
+
+                  <div className="space-y-5">
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-500">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        autoFocus
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onKeyDown={(e) => e.key === "Enter" && goNext()}
+                        placeholder="Jane Smith"
+                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors duration-200 text-base font-medium"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-500">
+                        Email
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          onKeyDown={(e) => e.key === "Enter" && goNext()}
+                          placeholder="jane@company.com"
+                          className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors duration-200 text-base font-medium pr-12"
+                        />
+                        {formData.email.includes("@") && (
+                          <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 w-5 h-5" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ── Step 2 ── */}
+              {step === 2 && (
+                <motion.div
+                  key="step2"
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-1">What's the issue?</h2>
+                    <p className="text-slate-400 text-sm">Give us a quick overview.</p>
+                  </div>
+
+                  <div className="space-y-5">
+                    {/* Subject */}
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-500">
+                        Subject
+                      </label>
+                      <input
+                        type="text"
+                        autoFocus
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        placeholder="e.g. Login not working"
+                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors duration-200 text-base font-medium"
+                      />
+                    </div>
+
+                    {/* Category */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-500">
+                        Category
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {categories.map((cat) => {
+                          const Icon = cat.icon;
+                          const active = formData.category === cat.id;
+                          return (
+                            <button
+                              key={cat.id}
+                              onClick={() => setFormData({ ...formData, category: cat.id })}
+                              className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border text-xs font-bold transition-all duration-200 ${
+                                active
+                                  ? "bg-emerald-500/10 border-emerald-500 text-emerald-400"
+                                  : "bg-slate-950 border-slate-700 text-slate-500 hover:border-slate-600"
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
+                              {cat.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Priority */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-500">
+                        Priority
+                      </label>
+                      <div className="flex gap-2">
+                        {priorities.map((p) => {
+                          const active = formData.priority === p.id;
+                          return (
+                            <button
+                              key={p.id}
+                              onClick={() => setFormData({ ...formData, priority: p.id })}
+                              className={`flex-1 py-2.5 rounded-xl border text-sm font-bold transition-all duration-200 ${
+                                active
+                                  ? p.active
+                                  : "bg-slate-950 border-slate-700 text-slate-600 hover:border-slate-600"
+                              }`}
+                            >
+                              {p.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ── Step 3 ── */}
+              {step === 3 && (
+                <motion.div
+                  key="step3"
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-1">Describe the issue</h2>
+                    <p className="text-slate-400 text-sm">The more detail, the faster ARIA can help.</p>
+                  </div>
+
+                  <div className="relative">
+                    <textarea
+                      autoFocus
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Describe your issue..."
+                      rows={7}
+                      maxLength={1000}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors duration-200 text-sm font-medium resize-none leading-relaxed"
+                    />
+                    <span className="absolute bottom-4 right-4 text-xs text-slate-600 font-mono">
+                      {formData.message.length}/1000
+                    </span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Navigation */}
+            <div className="mt-8 flex items-center justify-between gap-4">
+              {step > 1 ? (
+                <button
+                  onClick={goBack}
+                  className="flex items-center gap-1.5 px-5 py-3 border border-slate-700 hover:bg-slate-700/40 text-slate-400 hover:text-white rounded-xl transition-all duration-200 text-sm font-bold"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Back
+                </button>
+              ) : (
+                <div />
+              )}
+
+              {step < 3 ? (
+                <button
+                  onClick={goNext}
+                  className="flex items-center gap-1.5 ml-auto px-6 py-3 bg-white hover:bg-slate-100 text-slate-950 rounded-xl transition-colors duration-200 text-sm font-bold"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="flex items-center gap-2 ml-auto w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl transition-colors duration-200 font-bold justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_24px_rgba(16,185,129,0.3)]"
+                >
+                  {loading ? "Sending..." : "Send to ARIA →"}
+                  {!loading && <Send className="w-4 h-4" />}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Back home */}
+          <p className="mt-6 text-center text-sm text-slate-600">
+            <Link href="/" className="hover:text-slate-400 transition-colors duration-200">
+              ← Back to Home
+            </Link>
           </p>
         </div>
       </div>
