@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://spotty-agneta-hassaanfisky-2a742a92.koyeb.app";
     const response = await fetch(`${apiUrl}/api/v1/briefing/latest`, {
       next: { revalidate: 0 },
     });
@@ -15,7 +15,7 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://spotty-agneta-hassaanfisky-2a742a92.koyeb.app";
     const response = await fetch(`${apiUrl}/api/v1/briefing/generate`, {
       method: "POST",
     });

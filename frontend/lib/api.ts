@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://spotty-agneta-hassaanfisky-2a742a92.koyeb.app";
 
 export async function submitSupportForm(data: any) {
   const res = await fetch(`${API_URL}/api/v1/channels/webform/submit`, {
