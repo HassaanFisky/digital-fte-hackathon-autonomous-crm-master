@@ -103,9 +103,22 @@ async def channel_metrics():
     return await queries.get_channel_metrics_last_24h()
 
 
-# ─────────────────────────────────────────────
 # Tickets & Customers
 # ─────────────────────────────────────────────
+
+@app.get("/api/v1/tickets")
+async def list_tickets(limit: int = 10):
+    """List recent support tickets."""
+    try:
+        tickets = await queries.get_tickets(limit=limit)
+        # Convert UUIDs and datetimes to strings for JSON serialisation
+        for t in tickets:
+            t["id"] = str(t["id"])
+            t["created_at"] = t["created_at"].isoformat()
+        return tickets
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"detail": str(e)})
+
 
 @app.get("/api/v1/tickets/{ticket_id}")
 async def get_ticket(ticket_id: str):

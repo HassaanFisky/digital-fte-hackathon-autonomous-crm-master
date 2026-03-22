@@ -183,3 +183,26 @@ async def save_briefing(period_start, period_end, briefing_markdown, **stats):
             period_start, period_end, briefing_markdown, total_tickets, escalation_count, avg_sentiment
         )
         return str(briefing_id)
+
+async def get_tickets(limit: int = 10):
+    """Fetch recent tickets joined with customer names."""
+    pool = await get_db_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT 
+                t.id, 
+                c.name as customer_name, 
+                t.source_channel as channel, 
+                t.status, 
+                t.created_at,
+                t.subject,
+                t.priority
+            FROM tickets t
+            LEFT JOIN customers c ON t.customer_id = c.id
+            ORDER BY t.created_at DESC
+            LIMIT $1
+            """,
+            limit
+        )
+        return [dict(r) for r in rows]

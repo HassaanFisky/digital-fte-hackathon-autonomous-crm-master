@@ -25,7 +25,7 @@ export default function DashboardPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL ?? ""}/api/v1/tickets?limit=10`,
+        "/api/backend/v1/tickets?limit=10",
         { signal: controller.signal }
       );
       if (res.ok) {
