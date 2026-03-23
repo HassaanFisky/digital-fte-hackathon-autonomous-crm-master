@@ -114,7 +114,8 @@ async def list_tickets(limit: int = 10):
         # Convert UUIDs and datetimes to strings for JSON serialisation
         for t in tickets:
             t["id"] = str(t["id"])
-            t["created_at"] = t["created_at"].isoformat()
+            if t.get("created_at"):
+                t["created_at"] = t["created_at"].isoformat()
         return tickets
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
@@ -122,10 +123,30 @@ async def list_tickets(limit: int = 10):
 
 @app.get("/api/v1/tickets/{ticket_id}")
 async def get_ticket(ticket_id: str):
-    res = await queries.get_ticket_by_id(ticket_id)
-    if not res:
-        return Response(status_code=404)
-    return res
+    try:
+        res = await queries.get_ticket_by_id(ticket_id)
+        if not res:
+            return JSONResponse(status_code=404, content={"detail": "Ticket not found"})
+        
+        # Serialization
+        res["id"] = str(res["id"])
+        res["customer_id"] = str(res["customer_id"])
+        res["conversation_id"] = str(res["conversation_id"])
+        if res.get("created_at"):
+            res["created_at"] = res["created_at"].isoformat()
+        if res.get("resolved_at"):
+            res["resolved_at"] = res["resolved_at"].isoformat()
+            
+        if "messages" in res:
+            for m in res["messages"]:
+                m["id"] = str(m["id"])
+                m["conversation_id"] = str(m["conversation_id"])
+                if m.get("created_at"):
+                    m["created_at"] = m["created_at"].isoformat()
+        
+        return res
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"detail": str(e)})
 
 
 @app.get("/api/v1/customers/lookup")

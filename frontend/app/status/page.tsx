@@ -36,17 +36,20 @@ export default function StatusPage() {
         
         const mapStatus = (s: string): StatusType => {
           if (!s) return "unknown";
-          if (s === "ok") return "operational";
+          // Backend returns: "healthy" | "connected" | "active" for OK states
+          if (s === "ok" || s === "healthy" || s === "connected" || s === "active")
+            return "operational";
           if (s === "degraded") return "degraded";
-          return "down";
+          if (s === "down" || s === "disconnected" || s === "inactive") return "down";
+          return "unknown";
         };
 
         const newServices: Service[] = [
           { name: "Backend API", status: mapStatus(data.status), time: rt },
-          { name: "Database (Neon)", status: mapStatus(data.database), time: "-" },
-          { name: "Email Channel", status: mapStatus(data.channels?.email?.status), time: "-" },
-          { name: "WhatsApp Channel", status: mapStatus(data.channels?.whatsapp?.status), time: "-" },
-          { name: "Web Form Channel", status: mapStatus(data.channels?.web_form?.status), time: "-" },
+          { name: "Database (Neon)", status: mapStatus(data.db), time: "-" },
+          { name: "Web Form Channel", status: mapStatus(data.channels?.webform), time: "-" },
+          { name: "WhatsApp Channel", status: mapStatus(data.channels?.whatsapp), time: "-" },
+          { name: "Email Channel", status: mapStatus(data.channels?.gmail), time: "-" },
         ];
 
         setServices(newServices);
