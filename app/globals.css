@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * HASSAAN AI ARCHITECT — CRM Digital FTE
+ * Perfect Fidelity Theme System (v2.0)
+ * 100% Functional Dark/Light Mode
+ */
+
+@layer base {
+  :root {
+    /* Anthropic Warm Theme (LIGHT) */
+    --background: 40 33% 98%;    /* #FAF9F6 */
+    --foreground: 20 10% 20%;    /* #373330 */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 20 10% 20%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 10% 20%;
+    
+    --primary: 15 65% 55%;       /* Warm Terracotta #D97757 */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 40 20% 90%; 
+    --secondary-foreground: 20 10% 20%;
+    
+    --muted: 40 20% 90%;
+    --muted-foreground: 20 5% 45%;
+    
+    --accent: 120 10% 40%;       /* Muted Forest Green */
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 30 15% 85%;
+    --input: 30 15% 85%;
+    --ring: 15 65% 55%;
+    
+    --radius: 0.85rem;
+  }
+
+  .dark {
+    /* Senior Architect Theme (DARK) */
+    --background: 20 20% 6%;     /* Deep Onyx #121110 */
+    --foreground: 40 20% 92%;    /* Soft Off-White */
+    
+    --card: 20 15% 10%;          /* #1C1A17 */
+    --card-foreground: 40 20% 92%;
+    
+    --popover: 20 15% 10%;
+    --popover-foreground: 40 20% 92%;
+    
+    --primary: 15 65% 65%;       /* Muted Glow Terracotta */
+    --primary-foreground: 0 0% 0%;
+    
+    --secondary: 20 10% 15%; 
+    --secondary-foreground: 40 20% 92%;
+    
+    --muted: 20 10% 15%;
+    --muted-foreground: 20 5% 65%;
+    
+    --accent: 120 15% 60%;
+    --accent-foreground: 0 0% 0%;
+    
+    --border: 20 10% 18%;        /* #2E2B27 */
+    --input: 20 10% 18%;
+    --ring: 15 65% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight text-foreground;
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  /* Warm subtle background texture pattern */
+  .bg-texture {
+    background-image: radial-gradient(hsl(var(--foreground) / 0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: center;
+  }
+
+  .dark .bg-texture {
+    background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1.2px, transparent 1.2px);
+  }
+
+  /* Elegant Document Card — Corrected for Theme Switching */
+  .document-card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 20px;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .document-card:hover {
+    @apply shadow-float border-primary/40 -translate-y-1;
+  }
+  
+  /* Primary Button — Corrected for Theme Switching */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-2xl transition-all active:scale-[0.98] shadow-sm tracking-widest uppercase text-[11px];
+  }
+
+  /* Secondary Button — Corrected for Theme Switching */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-foreground bg-secondary hover:bg-border/60 rounded-2xl transition-all active:scale-[0.98] tracking-widest uppercase text-[11px] border border-transparent hover:border-border;
+  }
+}
