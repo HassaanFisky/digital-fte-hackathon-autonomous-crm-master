@@ -111,6 +111,18 @@ export const useAriaAgent = () => {
     }
   }, []);
 
+  const runAgentCommand = useCallback(async (agentType: string, message: string) => {
+    setError(null);
+    try {
+      const res = await callAgent(message, agentType);
+      return res;
+    } catch (err: any) {
+      console.error(`Run command for ${agentType} failed:`, err);
+      setError(err.message || `Failed to execute command for ${agentType}.`);
+      throw err;
+    }
+  }, []);
+
   const resetState = () => {
     setSupportResponse('');
     setClassification(null);
@@ -137,6 +149,7 @@ export const useAriaAgent = () => {
     submitTicket,
     getSuggestions,
     runAnalysis,
+    runAgentCommand,
     resetState,
   };
 };

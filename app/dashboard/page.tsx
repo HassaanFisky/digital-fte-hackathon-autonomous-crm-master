@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
-import { Inbox, BarChart2, AlertCircle, RefreshCw, Clock, WifiOff, TrendingUp, TrendingDown, Minus, Sparkles, Zap } from "lucide-react";
+import { Inbox, BarChart2, AlertCircle, RefreshCw, Clock, WifiOff, TrendingUp, TrendingDown, Minus, Sparkles, Zap, Terminal, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { useAriaAgent } from "@/lib/hooks/useAriaAgent";
 
@@ -160,14 +160,26 @@ export default function DashboardPage() {
                 </div>
                 <div className="text-5xl font-serif text-[#4A5D4E]">{INSTANT_STATS.resolutionRate}</div>
               </div>
-              <div className="document-card p-8">
-                <div className="flex items-center gap-3 text-[#8A857D] mb-4">
-                  <Zap className="w-5 h-5" />
-                  <h3 className="font-medium">Avg Response</h3>
-                </div>
-                <div className="text-5xl font-serif text-[#2D2926]">{INSTANT_STATS.avgResponseTime}</div>
-              </div>
             </div>
+
+            {/* ── AI AGENT TERMINAL LINK ── */}
+            <Link 
+              href="/dashboard/agents"
+              className="document-card p-6 flex items-center justify-between group hover:border-[#D97757] transition-all"
+            >
+              <div className="flex items-center gap-6">
+                <div className="w-14 h-14 bg-[#2D2926] rounded-2xl flex items-center justify-center text-white group-hover:bg-[#D97757] transition-colors">
+                  <Terminal className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-serif text-[#2D2926]">Agent Operations Center</h3>
+                  <p className="text-sm text-[#8A857D]">Command your Digital FTE roster directly.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-[#D97757] font-bold text-xs uppercase tracking-widest">
+                Manage Team <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
 
             {/* ── ARIA INTELLIGENCE REPORT ── */}
             {isLoadingAnalysis && (
