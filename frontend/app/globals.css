@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * HASSAAN AI ARCHITECT — CRM Digital FTE
+ * Perfect Fidelity Theme System (v2.0)
+ * 100% Functional Dark/Light Mode
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "../../../../packages/design-system/tokens.css";
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight text-foreground;
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  /* Warm subtle background texture pattern */
+  .bg-texture {
+    background-image: radial-gradient(hsl(var(--foreground) / 0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: center;
+  }
+
+  .dark .bg-texture {
+    background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1.2px, transparent 1.2px);
+  }
+
+  /* Elegant Document Card — Corrected for Theme Switching */
+  .document-card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 20px;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .document-card:hover {
+    @apply shadow-float border-primary -translate-y-1;
+  }
+  
+  /* Primary Button — Corrected for Theme Switching */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-2xl transition-all active:scale-[0.98] shadow-sm tracking-widest uppercase text-[11px];
+  }
+
+  /* Secondary Button — Corrected for Theme Switching */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-foreground bg-secondary hover:bg-border/60 rounded-2xl transition-all active:scale-[0.98] tracking-widest uppercase text-[11px] border border-transparent hover:border-border;
+  }
+}
