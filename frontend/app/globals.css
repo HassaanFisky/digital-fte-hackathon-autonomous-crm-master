@@ -8,11 +8,6 @@
  * 100% Functional Dark/Light Mode
  */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import "../../../../packages/design-system/tokens.css";
 @layer base {
   * {
     @apply border-border;
@@ -51,7 +46,7 @@
     background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1.2px, transparent 1.2px);
   }
 
-  /* Elegant Document Card — Corrected for Theme Switching */
+  /* Elegant Document Card */
   .document-card {
     background-color: hsl(var(--card));
     border: 1px solid hsl(var(--border));
@@ -61,16 +56,32 @@
   }
   
   .document-card:hover {
-    @apply shadow-float border-primary -translate-y-1;
+    @apply shadow-float -translate-y-1;
+    border-color: hsl(var(--accent));
   }
   
-  /* Primary Button — Corrected for Theme Switching */
+  /* Primary Button */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-2xl transition-all active:scale-[0.98] shadow-sm tracking-widest uppercase text-[11px];
+    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold rounded-2xl transition-all active:scale-[0.98] shadow-sm tracking-widest uppercase text-[11px];
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
   }
 
-  /* Secondary Button — Corrected for Theme Switching */
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+
+  /* Secondary Button */
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-foreground bg-secondary hover:bg-border/60 rounded-2xl transition-all active:scale-[0.98] tracking-widest uppercase text-[11px] border border-transparent hover:border-border;
+    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold rounded-2xl transition-all active:scale-[0.98] tracking-widest uppercase text-[11px] border;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--foreground));
+    border-color: transparent;
+  }
+
+  .btn-secondary:hover {
+    background-color: hsl(var(--border));
+    border-color: hsl(var(--border));
+    opacity: 0.7;
   }
 }
