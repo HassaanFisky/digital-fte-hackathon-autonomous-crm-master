@@ -57,15 +57,15 @@ export async function POST(req: NextRequest) {
       { role: 'user', content: message },
     ];
 
-    const groqPrimary = new Groq({ apiKey: process.env.GROQ_API_KEY_PRIMARY });
-    const groqSecondary = new Groq({ apiKey: process.env.GROQ_API_KEY_SECONDARY });
-    const hf = new HfInference(process.env.HF_TOKEN);
-
     let responseText = '';
     let modelUsed: 'groq-primary' | 'groq-secondary' | 'hf-fallback' = 'groq-primary';
 
     // TIER 1: Groq Primary
     try {
+      const apiKey = process.env.GROQ_API_KEY_PRIMARY || '';
+      if (!apiKey) throw new Error('GROQ_API_KEY_PRIMARY is missing');
+      
+      const groqPrimary = new Groq({ apiKey });
       const completion = await groqPrimary.chat.completions.create({
         messages: messages as any,
         model: 'llama-3.3-70b-versatile',
@@ -80,6 +80,10 @@ export async function POST(req: NextRequest) {
       // TIER 2: Groq Secondary
       modelUsed = 'groq-secondary';
       try {
+        const apiKey = process.env.GROQ_API_KEY_SECONDARY || '';
+        if (!apiKey) throw new Error('GROQ_API_KEY_SECONDARY is missing');
+
+        const groqSecondary = new Groq({ apiKey });
         const completion = await groqSecondary.chat.completions.create({
           messages: messages as any,
           model: 'llama-3.3-70b-versatile',
@@ -94,7 +98,12 @@ export async function POST(req: NextRequest) {
         // TIER 3: HF Fallback
         modelUsed = 'hf-fallback';
         try {
+          const hfToken = process.env.HF_TOKEN || '';
+          if (!hfToken) throw new Error('HF_TOKEN is missing');
+
+          const hf = new HfInference(hfToken);
           const response = await hf.chatCompletion({
+
             model: 'meta-llama/Llama-3.3-70B-Instruct',
             messages: messages as any,
             max_tokens: 1024,
