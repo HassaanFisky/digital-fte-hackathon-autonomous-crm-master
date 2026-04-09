@@ -3,12 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Globe, User, LogOut, LogIn } from "lucide-react";
-import { createClient } from "@supabase/supabase-js";
-
-// Unified Supabase fallback - handles cases where env isn't defined gracefully
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://panaversity-auth-placeholder.supabase.co";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
-const supabaseContext = createClient(supabaseUrl, supabaseKey);
+import { useSession, signOut } from "@/lib/auth-client";
 
 const ECOSYSTEM_APPS = [
   { name: "Portfolio Hub", image: "https://raw.githubusercontent.com/Hassaanfisky/hassaanfisky-panaversity-portfolio/main/public/blueprint-footer.png", url: "https://panaversity-h0-portfolio.vercel.app", id: "h0" },
@@ -21,28 +16,17 @@ const ECOSYSTEM_APPS = [
 export function EcosystemNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    supabaseContext.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-    
-    const { data: { subscription } } = supabaseContext.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    
-    return () => subscription.unsubscribe();
-  }, []);
+  const { data: session } = useSession();
+  const user = session?.user ?? null;
 
   const handleSignIn = () => {
     if (typeof window !== 'undefined') {
-       window.location.href = "https://panaversity-h0-portfolio.vercel.app/auth?redirect=" + encodeURIComponent(window.location.href);
+       window.location.href = "https://hackathon-2-todo-iota.vercel.app/sign-in?redirect=" + encodeURIComponent(window.location.href);
     }
   };
 
   const handleSignOut = async () => {
-    await supabaseContext.auth.signOut();
+    await signOut();
   };
 
   return (
