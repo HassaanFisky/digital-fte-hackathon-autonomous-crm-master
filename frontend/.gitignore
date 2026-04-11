@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+.next
+.vercel
+dist
+build
+
+# Environment
+.env
+.env.local
+.env.production
+.env*.local
+
+# Python
+venv
+__pycache__
+*.pyc
+.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.tsbuildinfo
+build_output.log
+
+.vercel

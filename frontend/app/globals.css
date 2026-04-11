@@ -8,6 +8,74 @@
  * 100% Functional Dark/Light Mode
  */
 
+:root {
+  --background: 40 33% 98%;
+  --foreground: 20 14% 13%;
+  --card: 40 33% 98%;
+  --card-foreground: 20 14% 13%;
+  --popover: 40 33% 98%;
+  --popover-foreground: 20 14% 13%;
+  --primary: 15 67% 59%;
+  --primary-foreground: 40 33% 98%;
+  --secondary: 40 18% 90%;
+  --secondary-foreground: 20 14% 13%;
+  --muted: 40 18% 90%;
+  --muted-foreground: 25 10% 45%;
+  --accent: 15 67% 59%;
+  --accent-foreground: 40 33% 98%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 40 33% 98%;
+  --border: 35 15% 85%;
+  --input: 35 15% 85%;
+  --ring: 15 67% 59%;
+  --radius: 1.25rem;
+
+  /* Semantic Design Tokens */
+  --bg-base: #FAF9F6;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F0EBE1;
+  --text-primary: #2D2926;
+  --text-secondary: #5C564D;
+  --text-muted: #8A857D;
+  --accent: #D97757;
+  --border-fine: #E5E0D8;
+  --snow-color: #FFFFFF;
+  --shadow-float: 0 24px 56px -12px rgba(45, 41, 38, 0.14);
+}
+
+.dark {
+  --background: 20 14% 4%;
+  --foreground: 40 33% 98%;
+  --card: 20 14% 6%;
+  --card-foreground: 40 33% 98%;
+  --popover: 20 14% 6%;
+  --popover-foreground: 40 33% 98%;
+  --primary: 15 67% 59%;
+  --primary-foreground: 40 33% 98%;
+  --secondary: 20 14% 12%;
+  --secondary-foreground: 40 33% 98%;
+  --muted: 20 14% 12%;
+  --muted-foreground: 25 10% 65%;
+  --accent: 15 67% 59%;
+  --accent-foreground: 40 33% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 40 33% 98%;
+  --border: 20 14% 15%;
+  --input: 20 14% 15%;
+  --ring: 15 67% 59%;
+
+  /* Dark Semantic Tokens */
+  --bg-base: #0D0C0B;
+  --bg-surface: #1A1612;
+  --bg-elevated: #26211C;
+  --text-primary: #FAF9F6;
+  --text-secondary: #DDD8CF;
+  --text-muted: #8A857D;
+  --accent: #D97757;
+  --border-fine: #38312E;
+  --snow-color: rgba(255, 255, 255, 0.4);
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -30,58 +98,58 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif tracking-tight text-foreground;
-    color: hsl(var(--foreground));
   }
 }
 
 @layer components {
+  .glass-apple {
+    @apply bg-white/70 dark:bg-black/40 backdrop-blur-2xl border border-white/20 dark:border-white/10;
+  }
+
   /* Warm subtle background texture pattern */
   .bg-texture {
-    background-image: radial-gradient(hsl(var(--foreground) / 0.04) 1px, transparent 1px);
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
     background-size: 28px 28px;
     background-position: center;
   }
 
-  .dark .bg-texture {
-    background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1.2px, transparent 1.2px);
-  }
-
   /* Elegant Document Card */
   .document-card {
-    background-color: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-fine);
     border-radius: 20px;
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   .document-card:hover {
-    @apply shadow-float -translate-y-1;
-    border-color: hsl(var(--accent));
+    box-shadow: var(--shadow-float);
+    transform: translateY(-4px);
+    border-color: var(--accent);
   }
   
   /* Primary Button */
   .btn-primary {
     @apply inline-flex items-center justify-center px-7 py-3.5 font-bold rounded-2xl transition-all active:scale-[0.98] shadow-sm tracking-widest uppercase text-[11px];
-    background-color: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
+    background-color: var(--accent);
+    color: white;
   }
 
   .btn-primary:hover {
-    opacity: 0.9;
+    filter: brightness(1.1);
   }
 
   /* Secondary Button */
   .btn-secondary {
     @apply inline-flex items-center justify-center px-7 py-3.5 font-bold rounded-2xl transition-all active:scale-[0.98] tracking-widest uppercase text-[11px] border;
-    background-color: hsl(var(--secondary));
-    color: hsl(var(--foreground));
-    border-color: transparent;
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-fine);
   }
 
   .btn-secondary:hover {
-    background-color: hsl(var(--border));
-    border-color: hsl(var(--border));
-    opacity: 0.7;
+    background-color: var(--bg-surface);
+    border-color: var(--accent);
   }
 }
+
