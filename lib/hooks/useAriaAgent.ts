@@ -74,6 +74,26 @@ export const useAriaAgent = () => {
           setIsLoadingEscalation(false);
         }
       }
+
+      // Persist to Dashboard localStorage
+      try {
+        const stored = localStorage.getItem("h4_tickets");
+        const existing = stored ? JSON.parse(stored) : [];
+        const newTicket = {
+          id: `TKT-${Math.floor(Math.random() * 9000) + 1000}`,
+          customer: name,
+          channel: "Aira Support",
+          status: "Needs Review",
+          time: "Just now",
+          priority: classifierRes.data.priority || "medium",
+          message: message,
+          timestamp: Date.now()
+        };
+        localStorage.setItem("h4_tickets", JSON.stringify([...existing, newTicket]));
+      } catch (e) {
+        console.error("Local storage save failed", e);
+      }
+
     } catch (err: any) {
       console.error('Submit ticket error:', err);
       setError(err.message || 'Failed to process ticket with ARIA intelligence.');

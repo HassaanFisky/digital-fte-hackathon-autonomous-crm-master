@@ -64,22 +64,22 @@ export default function LandingPage() {
           variants={containerVariants}
         >
           <motion.div variants={itemVariants} className="mb-10">
-            <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#D97757] px-5 py-2 border border-[#E5E0D8] bg-white/50 backdrop-blur-sm rounded-full shadow-sm">
+            <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-accent px-5 py-2 border border-border-fine bg-bg-surface/50 backdrop-blur-sm rounded-full shadow-sm">
               {t.hero.badge}
             </span>
           </motion.div>
 
           <motion.h1 
             variants={itemVariants} 
-            className="font-serif text-5xl md:text-7xl font-normal tracking-tight mb-10 text-[#38312E] text-pretty leading-[1.05]"
+            className="font-serif text-5xl md:text-7xl font-normal tracking-tight mb-10 text-text-primary text-pretty leading-[1.05]"
           >
             {t.hero.title} <br/>
-            <span className="italic text-[#D97757]">{t.hero.titleAccent}</span>
+            <span className="italic text-accent">{t.hero.titleAccent}</span>
           </motion.h1>
 
           <motion.p 
             variants={itemVariants} 
-            className="text-lg md:text-xl font-serif italic text-[#8A857D] max-w-[650px] mx-auto mb-14 leading-relaxed text-pretty opacity-90"
+            className="text-lg md:text-xl font-serif italic text-text-secondary max-w-[650px] mx-auto mb-14 leading-relaxed text-pretty opacity-90"
           >
             {t.hero.description}
           </motion.p>
@@ -103,15 +103,15 @@ export default function LandingPage() {
       </section>
 
       {/* Features Grid */}
-      <section className="w-full max-w-[1200px] mx-auto px-6 py-40 border-t border-[#E5E0D8]/60">
+      <section className="w-full max-w-[1200px] mx-auto px-6 py-40 border-t border-border-fine/60">
         <div className="text-center mb-20">
-          <div className="text-[#D97757] text-[11px] font-bold uppercase tracking-[0.4em] mb-4">
+          <div className="text-accent text-[11px] font-bold uppercase tracking-[0.4em] mb-4">
             {t.features.title}
           </div>
-          <h2 className="font-serif text-4xl text-[#38312E] mb-6">
+          <h2 className="font-serif text-4xl text-text-primary mb-6">
             {t.features.subtitle}
           </h2>
-          <p className="text-[#8A857D] text-lg max-w-[550px] mx-auto font-serif italic">
+          <p className="text-text-muted text-lg max-w-[550px] mx-auto font-serif italic">
             {t.features.description}
           </p>
         </div>
@@ -129,12 +129,12 @@ export default function LandingPage() {
               <div 
                 className={`w-16 h-16 rounded-[24px] flex items-center justify-center mb-10 transition-transform duration-500 group-hover:scale-110 ${color}`}
               >
-                <Icon className="w-7 h-7 text-[#38312E]" strokeWidth={1.5} />
+                <Icon className="w-7 h-7 text-text-primary" strokeWidth={1.5} />
               </div>
-              <h3 className="text-2xl font-serif font-bold text-[#38312E] mb-4 tracking-tight">
+              <h3 className="text-2xl font-serif font-bold text-text-primary mb-4 tracking-tight">
                 {title}
               </h3>
-              <p className="text-[#8A857D] leading-relaxed font-serif opacity-80">
+              <p className="text-text-secondary leading-relaxed font-serif opacity-80">
                 {desc}
               </p>
             </motion.div>

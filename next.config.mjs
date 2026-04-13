@@ -12,6 +12,22 @@ const nextConfig = {
       },
     ];
   },
+  webpack: (config, { isServer }) => {
+    // Enable WASM for WebLLM (required for its WASM/WGSL shader runtime)
+    config.experiments = {
+      ...config.experiments,
+      asyncWebAssembly: true,
+      layers: true,
+    };
+    // Never bundle WebLLM on the server — it requires WebGPU (browser-only)
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@mlc-ai/web-llm': false,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

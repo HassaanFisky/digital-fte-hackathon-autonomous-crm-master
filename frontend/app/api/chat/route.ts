@@ -1,10 +1,6 @@
 import { Groq } from "groq-sdk";
 import { NextResponse } from "next/server";
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
     const { messages, context } = await req.json();
@@ -64,7 +60,7 @@ export async function POST(req: Request) {
             }
           );
           const result = await response.json();
-          responseText = result[0]?.generated_text?.split("[/INST]")?.pop()?.trim() || "Protocol Failure.";
+          responseText = typeof result === 'string' ? result : (result[0]?.generated_text?.split("[/INST]")?.pop()?.trim() || "Protocol Failure.");
         } else {
           responseText = "I apologize, but all intelligence nodes are currently unreachable.";
         }
@@ -80,4 +76,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

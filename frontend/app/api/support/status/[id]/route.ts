@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params;
     const ticketId = params.id;
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
     

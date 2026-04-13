@@ -2,133 +2,209 @@
 @tailwind components;
 @tailwind utilities;
 
-/**
- * HASSAAN AI ARCHITECT — CRM Digital FTE
- * Perfect Fidelity Theme System (v2.0)
- * 100% Functional Dark/Light Mode
- */
-
-@layer base {
-  :root {
-    /* Anthropic Warm Theme (LIGHT) */
-    --background: 40 33% 98%;    /* #FAF9F6 */
-    --foreground: 20 10% 20%;    /* #373330 */
-    
-    --card: 0 0% 100%;
-    --card-foreground: 20 10% 20%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 10% 20%;
-    
-    --primary: 15 65% 55%;       /* Warm Terracotta #D97757 */
-    --primary-foreground: 0 0% 100%;
-    
-    --secondary: 40 20% 90%; 
-    --secondary-foreground: 20 10% 20%;
-    
-    --muted: 40 20% 90%;
-    --muted-foreground: 20 5% 45%;
-    
-    --accent: 120 10% 40%;       /* Muted Forest Green */
-    --accent-foreground: 0 0% 100%;
-    
-    --destructive: 0 75% 60%;
-    --destructive-foreground: 0 0% 100%;
-    
-    --border: 30 15% 85%;
-    --input: 30 15% 85%;
-    --ring: 15 65% 55%;
-    
-    --radius: 0.85rem;
-  }
-
-  .dark {
-    /* Senior Architect Theme (DARK) */
-    --background: 20 20% 6%;     /* Deep Onyx #121110 */
-    --foreground: 40 20% 92%;    /* Soft Off-White */
-    
-    --card: 20 15% 10%;          /* #1C1A17 */
-    --card-foreground: 40 20% 92%;
-    
-    --popover: 20 15% 10%;
-    --popover-foreground: 40 20% 92%;
-    
-    --primary: 15 65% 65%;       /* Muted Glow Terracotta */
-    --primary-foreground: 0 0% 0%;
-    
-    --secondary: 20 10% 15%; 
-    --secondary-foreground: 40 20% 92%;
-    
-    --muted: 20 10% 15%;
-    --muted-foreground: 20 5% 65%;
-    
-    --accent: 120 15% 60%;
-    --accent-foreground: 0 0% 0%;
-    
-    --border: 20 10% 18%;        /* #2E2B27 */
-    --input: 20 10% 18%;
-    --ring: 15 65% 65%;
-  }
+/* ─── HI-FI SYSTEM TOKENS ─── */
+:root, [data-theme='light'] {
+  --bg-base:       #FCFAF8; 
+  --bg-surface:    #F0EBE1; 
+  --bg-elevated:   #EBE5D8;
+  --border-fine:   #E5E0D8; 
+  --border-muted:  #DED8CD;
+  --border-active: #D97757;
+  --text-primary:  #38312E; 
+  --text-secondary:#57534E;
+  --text-muted:    #8A857D;
+  --accent:        #D97757; 
+  --accent-dim:    rgba(217, 119, 87, 0.08);
+  --success:       #3D9970;
+  --error:         #D95757;
+  --radius-sm:     0.75rem;
+  --radius-md:     1.25rem;
+  --radius-lg:     2rem;
+  --font-serif:    "Lora", serif;
+  --font-sans:     "Inter", sans-serif;
+  --font-mono:     "JetBrains Mono", monospace;
+  --shadow-card:   0 4px 16px -4px rgba(56, 49, 46, 0.08), 0 0 0 1px var(--border-fine);
+  --shadow-modal:  0 24px 64px -12px rgba(56, 49, 46, 0.12), 0 0 0 1px var(--border-fine);
+  --snow-color:    rgba(255, 255, 255, 0.8);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-    -webkit-tap-highlight-color: transparent;
-  }
+[data-theme='dark'] {
+  --bg-base:       #0A0A0A;
+  --bg-surface:    #141414;
+  --bg-elevated:   #1F1F1F;
+  --border-fine:   #262626;
+  --border-muted:  #333333;
+  --border-active: #E58A6D;
+  --text-primary:  #FAF9F6;
+  --text-secondary:#D1D5DB;
+  --text-muted:    #9CA3AF;
+  --accent:        #E58A6D;
+  --accent-dim:    rgba(229, 138, 109, 0.1);
+  --success:       #6EE7B7;
+  --error:         #EF4444;
+  --shadow-card:   0 8px 32px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-fine);
+  --shadow-modal:  0 32px 80px -16px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-fine);
+  --snow-color:    rgba(255, 255, 255, 1);
+}
 
+/* ─── HI-FI BASE ─── */
+@layer base {
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    line-height: 1.6;
     transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
                 color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background-image: radial-gradient(rgba(56, 49, 46, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-tight text-foreground;
-    color: hsl(var(--foreground));
+  .dark body {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   }
 }
 
+/* ─── HI-FI COMPONENTS ─── */
 @layer components {
-  /* Warm subtle background texture pattern */
-  .bg-texture {
-    background-image: radial-gradient(hsl(var(--foreground) / 0.04) 1px, transparent 1px);
-    background-size: 28px 28px;
-    background-position: center;
+  .prose-editorial {
+    font-family: var(--font-serif);
+    line-height: 1.7;
+    color: var(--text-secondary);
   }
 
-  .dark .bg-texture {
-    background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1.2px, transparent 1.2px);
+  .card-humanist {
+    background-color: var(--bg-surface);
+    border: 0.8px solid var(--border-fine);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Elegant Document Card — Corrected for Theme Switching */
-  .document-card {
-    background-color: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-radius: 20px;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  
-  .document-card:hover {
-    @apply shadow-float border-primary/40 -translate-y-1;
-  }
-  
-  /* Primary Button — Corrected for Theme Switching */
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-2xl transition-all active:scale-[0.98] shadow-sm tracking-widest uppercase text-[11px];
+  .card-humanist:hover {
+    box-shadow: var(--shadow-modal);
+    transform: translateY(-4px);
+    border-color: var(--accent);
   }
 
-  /* Secondary Button — Corrected for Theme Switching */
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold text-foreground bg-secondary hover:bg-border/60 rounded-2xl transition-all active:scale-[0.98] tracking-widest uppercase text-[11px] border border-transparent hover:border-border;
+  .btn-tactile {
+    @apply transition-all duration-300;
+  }
+
+  .btn-tactile:active {
+    @apply scale-[0.97];
+  }
+
+  .glass-nav {
+    @apply sticky top-4 mx-auto z-50;
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    background-color: rgba(252, 250, 248, 0.8);
+    border: 0.8px solid var(--border-fine);
+    border-radius: var(--radius-lg);
+    width: calc(100% - 2rem);
+    max-width: 1100px;
+  }
+
+  .dark .glass-nav {
+    background-color: rgba(10, 10, 10, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
   }
 }
+
+/* ─── HI-FI UTILITIES ─── */
+@layer utilities {
+  .glass-apple {
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    transition: all 0.5s;
+    background-color: rgba(250, 249, 246, 0.75);
+    border: 1px solid rgba(56, 49, 46, 0.05);
+  }
+
+  .dark .glass-apple {
+    background-color: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .shadow-float {
+    box-shadow: 0 20px 50px -12px rgba(56, 49, 46, 0.12), 0 0 0 1px var(--border-fine);
+  }
+
+  .dark .shadow-float {
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-fine);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-text-primary to-accent;
+  }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-fine);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Scrollbar hide — used by AiraAssistant */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Selection Highlight */
+::selection {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+/* ── Globe / Earth button rotation ───────────────────────────────────────── */
+@keyframes globe-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-globe-spin {
+  animation: globe-spin 18s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* ── Button visibility insurance ─────────────────────────────────────────── */
+button:not([class*='bg-accent']):not([class*='bg-text']):not([class*='bg-bg-elevated']):not([role='toolbar'] button) {
+  --btn-outline-alpha: 0.12;
+}
+[data-weather='snow'] button,
+[data-weather='cloudy'] button {
+  --btn-outline-alpha: 0.18;
+}
+
+/* ── "AI Platform" navbar button contrast ────────────────────────────────── */
+:root .navbar-cta-primary {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(0,0,0,0.18);
+}
+.dark .navbar-cta-primary {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 4px 12px rgba(0,0,0,0.4);
+}
+

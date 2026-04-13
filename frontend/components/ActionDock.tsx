@@ -3,18 +3,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Languages, Snowflake, MessageSquare, BookOpen } from "lucide-react";
-import { useLanguage } from "@/components/LanguageProvider";
+import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "next-themes";
 
 /**
  * HASSAAN AI ARCHITECT — ActionDock Node
- * v3.1: High-fidelity dock with Apple Glass aesthetics.
+ * v4.0: Unified High-fidelity dock with Humanist aesthetics.
  */
 export function ActionDock({ isPortfolio = false }: { isPortfolio?: boolean }) {
   const { lang, changeLanguage, t, languages } = useLanguage();
   const [showLanguage, setShowLanguage] = useState(false);
   const [isSnowing, setIsSnowing] = useState(false);
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   
   const dockRef = useRef<HTMLDivElement>(null);
   const languageRef = useRef<HTMLDivElement>(null);
@@ -55,7 +55,7 @@ export function ActionDock({ isPortfolio = false }: { isPortfolio?: boolean }) {
     },
     { 
       id: "snow", 
-      icon: <Snowflake size={20} className={isSnowing ? "text-cyan-400 animate-spin-slow" : ""} />, 
+      icon: <Snowflake size={20} className={isSnowing ? "text-accent animate-spin-slow" : ""} />, 
       label: t.ui.snow, 
       action: toggleSnow,
       active: isSnowing 
@@ -120,7 +120,7 @@ export function ActionDock({ isPortfolio = false }: { isPortfolio?: boolean }) {
             title={item.label}
           >
             {item.icon}
-            <div className={`absolute ${lang === 'ur' ? 'left-full ml-4' : 'right-full mr-4'} px-3 py-1.5 bg-text-primary text-bg-base text-[9px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] font-bold shadow-xl border border-white/10`}>
+            <div className={`absolute ${lang === 'ur' ? 'left-full ml-4' : 'right-full mr-4'} px-3 py-1.5 bg-text-primary text-bg-base text-[9px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] font-bold shadow-xl border border-white/20`}>
               {item.label}
             </div>
           </button>

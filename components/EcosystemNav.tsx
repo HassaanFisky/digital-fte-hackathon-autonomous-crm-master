@@ -1,19 +1,26 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Globe, User, LogOut, LogIn } from "lucide-react";
 import { useSession, signOut } from "@/lib/auth-client";
+import { useLanguage } from "./LanguageProvider";
 
+/**
+ * HASSAAN AI ARCHITECT — Ecosystem Hub Node
+ * v4.0: Unified Project Hub & Identity Sync.
+ * Standardized across all hackathon modules.
+ */
 const ECOSYSTEM_APPS = [
-  { name: "Portfolio Hub", image: "https://raw.githubusercontent.com/Hassaanfisky/hassaanfisky-panaversity-portfolio/main/public/blueprint-footer.png", url: "https://panaversity-h0-portfolio.vercel.app", id: "h0" },
-  { name: "Physical AI & Robotics", image: "https://panaversity-h1-robotics.vercel.app/h1-thumb.png", url: "https://panaversity-h1-robotics.vercel.app", id: "h1" },
-  { name: "Evolution of Todo", image: "https://hackathon-2-todo-iota.vercel.app/h2-thumb.png", url: "https://hackathon-2-todo-iota.vercel.app", id: "h2" },
-  { name: "LearnFlow Engine", image: "https://hassaanfisky-panaversity-learnflow.vercel.app/h2-thumb.png", url: "https://hassaanfisky-panaversity-learnflow.vercel.app", id: "h3" },
-  { name: "Companion FTE", image: "https://panaversity-h4-companion.vercel.app/h4-thumb.png", url: "https://panaversity-h4-companion.vercel.app", id: "h4" },
+  { name: "Portfolio Hub", image: "/blueprint-footer.png", url: "https://panaversity-h0-portfolio.vercel.app", id: "H0" },
+  { name: "Physical AI & Robotics", image: "/h1-thumb.png", url: "https://h1robotics.vercel.app", id: "H1" },
+  { name: "Evolution of To-Do", image: "/h2-thumb.png", url: "https://evolution-of-todo.vercel.app", id: "H2" },
+  { name: "LearnFlow Engine", image: "/h3-thumb.png", url: "https://learnflow-platform-h3.vercel.app", id: "H3" },
+  { name: "Companion FTE", image: "/h4-thumb.png", url: "https://frontend-ochre-mu-82.vercel.app", id: "H4" },
 ];
 
 export function EcosystemNav() {
+  const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const { data: session } = useSession();
@@ -21,7 +28,9 @@ export function EcosystemNav() {
 
   const handleSignIn = () => {
     if (typeof window !== 'undefined') {
-       window.location.href = "https://hackathon-2-todo-iota.vercel.app/sign-in?redirect=" + encodeURIComponent(window.location.href);
+       // Single Sign-On Hub (H2 - Evolution of To-Do)
+       const authHub = "https://evolution-of-todo.vercel.app/sign-in";
+       window.location.href = `${authHub}?redirect=${encodeURIComponent(window.location.href)}`;
     }
   };
 
@@ -31,14 +40,15 @@ export function EcosystemNav() {
 
   return (
     <>
-      <div className="fixed top-6 right-6 z-[10000]">
-        <div className="relative flex flex-col items-end">
+      {/* Identity Node — Top Right (or Left in UR) */}
+      <div className={`fixed top-24 z-[10000] ${language === 'ur' ? 'left-6' : 'right-6'}`}>
+        <div className="relative">
           <button 
             onClick={() => setIsAuthOpen(!isAuthOpen)}
-            className="w-12 h-12 bg-[#FAF9F6]/90 backdrop-blur-[18px] border border-[#E5E0D8] rounded-full shadow-[0_8px_24px_-4px_rgba(217,119,87,0.18)] flex items-center justify-center text-[#5C564D] hover:text-[#D97757] hover:border-[#D97757]/50 transition-all hover:scale-105 active:scale-95 group"
+            className="w-12 h-12 glass-apple rounded-full shadow-float flex items-center justify-center text-text-secondary hover:text-accent border-white/20 transition-all hover:scale-110 active:scale-90 group"
           >
-            <User size={20} className={user ? "text-[#D97757]" : ""} />
-            {user && <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#FAF9F6] shadow-sm animate-pulse" />}
+            <User size={20} className={user ? "text-accent" : ""} />
+            {user && <div className="absolute top-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-bg-base shadow-sm animate-pulse" />}
           </button>
           
           <AnimatePresence>
@@ -47,30 +57,30 @@ export function EcosystemNav() {
                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                className="absolute top-16 right-0 w-72 bg-[#FAF9F6]/95 backdrop-blur-[24px] border border-[#E5E0D8]/80 rounded-2xl shadow-[0_24px_56px_-12px_rgba(45,41,38,0.14)] overflow-hidden p-2 origin-top-right mt-2"
+                className={`absolute top-14 w-72 glass-apple rounded-2xl shadow-float overflow-hidden p-2 origin-top-right border-white/20 ${language === 'ur' ? 'left-0' : 'right-0'}`}
               >
-                <div className="px-3 py-2 text-[9.5px] font-bold uppercase tracking-[0.25em] text-[#D97757] border-b border-[#E5E0D8]/60 mb-2 font-mono">
+                <div className="px-4 py-2 text-[9px] font-bold uppercase tracking-[0.3em] text-accent border-b border-white/10 mb-2">
                   Network Identity
                 </div>
                 {user ? (
                   <div className="flex flex-col gap-1">
-                    <div className="px-3 py-3 bg-white rounded-[12px] mb-1 border border-[#E5E0D8]/50 shadow-sm flex flex-col items-center text-center">
-                       <div className="w-10 h-10 bg-[#D97757]/10 rounded-full mb-2 flex items-center justify-center text-[#D97757]">
+                    <div className="px-3 py-3 bg-bg-base/40 rounded-xl mb-1 border border-white/5 shadow-inner flex flex-col items-center text-center">
+                       <div className="w-10 h-10 bg-accent/10 rounded-full mb-2 flex items-center justify-center text-accent">
                          <User size={18} />
                        </div>
-                       <span className="text-xs font-bold text-[#2D2926] break-all max-w-[240px] leading-tight block">{user.email}</span>
-                       <span className="text-[10px] text-emerald-600 uppercase tracking-widest block mt-1 font-serif italic flex items-center gap-1 justify-center"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> Verified Architect Node</span>
+                       <span className="text-[11px] font-bold text-text-primary truncate max-w-full">{user.email}</span>
+                       <span className="text-[9px] text-emerald-500 uppercase tracking-widest block mt-1 font-serif italic">Verified Architect Node</span>
                     </div>
-                    <button onClick={handleSignOut} className="flex flex-row-reverse justify-center items-center gap-3 px-3 py-3 rounded-[12px] bg-red-50 hover:bg-red-100 text-red-600 transition-all text-[11px] font-bold w-full mt-1 border border-red-100">
+                    <button onClick={handleSignOut} className="flex flex-row-reverse justify-center items-center gap-3 px-3 py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-all text-[10px] font-bold w-full mt-1 border border-red-500/20 uppercase tracking-widest">
                       Terminate Session <LogOut size={14} />
                     </button>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-2 p-1">
-                    <div className="text-center py-2">
-                       <p className="text-[11.5px] font-medium text-[#5C564D] leading-relaxed px-2">Global ecosystem verification is required. Connect your identity to access full functionality.</p>
+                    <div className="text-center py-4">
+                       <p className="text-[11px] font-medium text-text-secondary leading-relaxed px-2 font-serif italic">{t.auth?.required || "Identity verification is required for full ecosystem access."}</p>
                     </div>
-                    <button onClick={handleSignIn} className="flex justify-center items-center gap-2 px-3 py-3 rounded-xl bg-gradient-to-r from-[#D97757] to-[#c86444] text-white transition-all text-xs font-bold w-full shadow-[0_8px_16px_-4px_rgba(217,119,87,0.3)] hover:shadow-[0_12px_24px_-4px_rgba(217,119,87,0.4)]">
+                    <button onClick={handleSignIn} className="flex justify-center items-center gap-2 px-3 py-3 rounded-xl bg-accent text-white transition-all text-[10px] font-bold w-full shadow-lg shadow-accent/20 uppercase tracking-widest">
                       Initialize Uplink <LogIn size={15} />
                     </button>
                   </div>
@@ -81,36 +91,40 @@ export function EcosystemNav() {
         </div>
       </div>
 
-      <div className="fixed bottom-8 left-8 z-[10000]">
+      {/* Ecosystem Hub — Bottom Left (or Right in UR) */}
+      <div className={`fixed bottom-10 z-[10000] ${language === 'ur' ? 'right-10' : 'left-10'}`}>
         <AnimatePresence>
           {isOpen && (
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="absolute bottom-16 left-0 w-72 bg-[#FAF9F6]/95 backdrop-blur-[24px] border border-[#E5E0D8]/80 rounded-2xl shadow-[0_24px_56px_-12px_rgba(45,41,38,0.14)] overflow-hidden p-2 origin-bottom-left"
+              className={`absolute bottom-16 w-80 glass-apple rounded-2xl shadow-float overflow-hidden p-2 border-white/20 ${language === 'ur' ? 'right-0 origin-bottom-right' : 'left-0 origin-bottom-left'}`}
             >
-              <div className="px-3 py-2 text-[9.5px] font-bold uppercase tracking-[0.25em] text-[#D97757] border-b border-[#E5E0D8]/60 mb-2 font-mono flex items-center justify-between">
+              <div className="px-4 py-2 text-[9px] font-bold uppercase tracking-[0.3em] text-accent border-b border-white/10 mb-2 flex items-center justify-between">
                 <span>Ecosystem Grid</span>
-                <span className="text-[8px] tracking-widest opacity-60">Status: WIRED</span>
+                <span className="text-[8px] opacity-60">Status: WIRED</span>
               </div>
               <div className="space-y-1">
                 {ECOSYSTEM_APPS.map((app) => (
                   <a
                     key={app.id}
                     href={app.url}
-                    className="flex items-center gap-4 px-3 py-3 rounded-[12px] hover:bg-white shadow-sm hover:shadow-md transition-all group border border-transparent hover:border-[#E5E0D8]/80 cursor-pointer"
+                    className="flex items-center gap-4 px-3 py-3 rounded-xl hover:bg-white/10 transition-all group border border-transparent hover:border-white/10"
                   >
-                    <div className="relative w-10 h-10 rounded-lg bg-white border border-[#E5E0D8]/50 flex items-center justify-center overflow-hidden transition-all shadow-sm">
+                    <div className="relative w-11 h-11 rounded-lg bg-black/20 border border-white/10 flex items-center justify-center overflow-hidden transition-all shadow-inner">
                       <img 
                         src={app.image} 
                         alt={app.name}
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.15] transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                        onError={(e) => {
+                           (e.target as any).src = "https://raw.githubusercontent.com/Hassaanfisky/hassaanfisky-panaversity-portfolio/main/public/blueprint-footer.png";
+                        }}
                       />
                     </div>
                     <div className="flex flex-col flex-1">
-                      <span className="text-xs font-bold text-[#2D2926] group-hover:text-[#D97757] transition-colors">{app.name}</span>
-                      <span className="text-[9px] text-[#8A857D] uppercase tracking-widest font-serif italic mt-0.5">{app.id.toUpperCase()} Production Node</span>
+                      <span className="text-[11px] font-bold text-text-primary group-hover:text-accent transition-colors uppercase tracking-wider">{app.name}</span>
+                      <span className="text-[8px] text-text-muted uppercase tracking-widest font-serif italic mt-0.5">{app.id} Node &bull; Production</span>
                     </div>
                   </a>
                 ))}
@@ -121,10 +135,10 @@ export function EcosystemNav() {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 bg-[#FAF9F6] border border-[#E5E0D8] rounded-full shadow-[0_12px_24px_-8px_rgba(45,41,38,0.12)] flex items-center justify-center text-[#2D2926] hover:text-[#D97757] hover:border-[#D97757]/50 group relative transition-all active:scale-95"
+          className="w-16 h-16 glass-apple border-white/20 rounded-full shadow-float flex items-center justify-center text-text-primary hover:text-accent group relative transition-all active:scale-95 hover:scale-110"
         >
-          <Globe size={22} className={isOpen ? "rotate-180" : "animate-[spin_20s_linear_infinite]"} strokeWidth={1.5} />
-          <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-[#D97757] rounded-full border-2 border-[#FAF9F6] shadow-md animate-pulse" />
+          <Globe size={24} className={isOpen ? "rotate-90" : "animate-[spin_30s_linear_infinite]"} strokeWidth={1.5} />
+          <div className="absolute top-1 right-1 w-3.5 h-3.5 bg-accent rounded-full border-2 border-bg-base shadow-sm animate-pulse" />
         </button>
       </div>
     </>

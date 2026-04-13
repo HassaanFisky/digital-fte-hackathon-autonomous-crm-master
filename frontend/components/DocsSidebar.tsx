@@ -59,7 +59,7 @@ export default function DocsSidebar() {
             placeholder="Search docs..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white border border-[#DDD8CF] rounded-md py-2 pl-9 pr-3 text-[0.875rem] font-sans text-[#1A1612] placeholder:text-[#9E948A] focus:outline-none focus:border-[#CC5500] transition-colors"
+            className="w-full bg-bg-surface border border-border-fine rounded-md py-2 pl-9 pr-3 text-[0.875rem] font-sans text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           />
         </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export type AgentType = "architect" | "marketing";
+export type AgentType = "architect" | "marketing" | "support";
 
 interface UseAiraAgentResult {
   isLoading: boolean;
@@ -25,16 +25,16 @@ export function useAiraAgent(): UseAiraAgentResult {
       const response = await fetch("/api/agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, type }),
+        body: JSON.stringify({ message: prompt, agentType: type }),
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
+      if (!response.ok || !data.success) {
         throw new Error(data.error || "Failed to execute agent");
       }
 
-      setResult(data.result);
+      setResult(data.data);
     } catch (err: any) {
       setError(err?.message || "Something went wrong execution the AIRA agent.");
       console.error("Agent Execution Error:", err);

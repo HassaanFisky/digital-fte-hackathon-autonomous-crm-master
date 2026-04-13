@@ -1,155 +1,203 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/**
- * HASSAAN AI ARCHITECT — CRM Digital FTE
- * Perfect Fidelity Theme System (v2.0)
- * 100% Functional Dark/Light Mode
- */
-
-:root {
-  --background: 40 33% 98%;
-  --foreground: 20 14% 13%;
-  --card: 40 33% 98%;
-  --card-foreground: 20 14% 13%;
-  --popover: 40 33% 98%;
-  --popover-foreground: 20 14% 13%;
-  --primary: 15 67% 59%;
-  --primary-foreground: 40 33% 98%;
-  --secondary: 40 18% 90%;
-  --secondary-foreground: 20 14% 13%;
-  --muted: 40 18% 90%;
-  --muted-foreground: 25 10% 45%;
-  --accent: 15 67% 59%;
-  --accent-foreground: 40 33% 98%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 40 33% 98%;
-  --border: 35 15% 85%;
-  --input: 35 15% 85%;
-  --ring: 15 67% 59%;
-  --radius: 1.25rem;
-
-  /* Semantic Design Tokens */
-  --bg-base: #FAF9F6;
-  --bg-surface: #FFFFFF;
-  --bg-elevated: #F0EBE1;
-  --text-primary: #2D2926;
-  --text-secondary: #5C564D;
-  --text-muted: #8A857D;
-  --accent: #D97757;
-  --border-fine: #E5E0D8;
-  --snow-color: #FFFFFF;
-  --shadow-float: 0 24px 56px -12px rgba(45, 41, 38, 0.14);
+/* ─── HI-FI SYSTEM TOKENS ─── */
+:root, [data-theme='light'] {
+  --bg-base:       #FCFAF8; 
+  --bg-surface:    #F0EBE1; 
+  --bg-elevated:   #EBE5D8;
+  --border-fine:   #E5E0D8; 
+  --border-muted:  #DED8CD;
+  --border-active: #D97757;
+  --text-primary:  #38312E; 
+  --text-secondary:#57534E;
+  --text-muted:    #8A857D;
+  --accent:        #D97757; 
+  --accent-dim:    rgba(217, 119, 87, 0.08);
+  --success:       #3D9970;
+  --error:         #D95757;
+  --radius-sm:     0.75rem;
+  --radius-md:     1.25rem;
+  --radius-lg:     2rem;
+  --font-serif:    "Lora", serif;
+  --font-sans:     "Inter", sans-serif;
+  --font-mono:     "JetBrains Mono", monospace;
+  --shadow-card:   0 4px 16px -4px rgba(56, 49, 46, 0.08), 0 0 0 1px var(--border-fine);
+  --shadow-modal:  0 24px 64px -12px rgba(56, 49, 46, 0.12), 0 0 0 1px var(--border-fine);
+  --snow-color:    rgba(255, 255, 255, 0.8);
 }
 
-.dark {
-  --background: 20 14% 4%;
-  --foreground: 40 33% 98%;
-  --card: 20 14% 6%;
-  --card-foreground: 40 33% 98%;
-  --popover: 20 14% 6%;
-  --popover-foreground: 40 33% 98%;
-  --primary: 15 67% 59%;
-  --primary-foreground: 40 33% 98%;
-  --secondary: 20 14% 12%;
-  --secondary-foreground: 40 33% 98%;
-  --muted: 20 14% 12%;
-  --muted-foreground: 25 10% 65%;
-  --accent: 15 67% 59%;
-  --accent-foreground: 40 33% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 40 33% 98%;
-  --border: 20 14% 15%;
-  --input: 20 14% 15%;
-  --ring: 15 67% 59%;
-
-  /* Dark Semantic Tokens */
-  --bg-base: #0D0C0B;
-  --bg-surface: #1A1612;
-  --bg-elevated: #26211C;
-  --text-primary: #FAF9F6;
-  --text-secondary: #DDD8CF;
-  --text-muted: #8A857D;
-  --accent: #D97757;
-  --border-fine: #38312E;
-  --snow-color: rgba(255, 255, 255, 0.4);
+.dark, [data-theme='dark'] {
+  --bg-base:       #0A0A0A;
+  --bg-surface:    #141414;
+  --bg-elevated:   #1F1F1F;
+  --border-fine:   #262626;
+  --border-muted:  #333333;
+  --border-active: #E58A6D;
+  --text-primary:  #FAF9F6;
+  --text-secondary:#D1D5DB;
+  --text-muted:    #9CA3AF;
+  --accent:        #E58A6D;
+  --accent-dim:    rgba(229, 138, 109, 0.1);
+  --success:       #6EE7B7;
+  --error:         #EF4444;
+  --shadow-card:   0 8px 32px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-fine);
+  --shadow-modal:  0 32px 80px -16px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-fine);
+  --snow-color:    rgba(255, 255, 255, 1);
 }
 
+/* ─── HI-FI BASE ─── */
 @layer base {
-  * {
-    @apply border-border;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-    -webkit-tap-highlight-color: transparent;
-  }
-
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    line-height: 1.6;
     transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
                 color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background-image: radial-gradient(rgba(56, 49, 46, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-tight text-foreground;
+  .dark body {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   }
 }
 
+/* ─── HI-FI COMPONENTS ─── */
 @layer components {
-  .glass-apple {
-    @apply bg-white/70 dark:bg-black/40 backdrop-blur-2xl border border-white/20 dark:border-white/10;
+  .prose-editorial {
+    font-family: var(--font-serif);
+    line-height: 1.7;
+    color: var(--text-secondary);
   }
 
-  /* Warm subtle background texture pattern */
-  .bg-texture {
-    background-image: radial-gradient(currentColor 1px, transparent 1px);
-    background-size: 28px 28px;
-    background-position: center;
-  }
-
-  /* Elegant Document Card */
-  .document-card {
+  .card-humanist {
     background-color: var(--bg-surface);
-    border: 1px solid var(--border-fine);
-    border-radius: 20px;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 0.8px solid var(--border-fine);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
-  .document-card:hover {
-    box-shadow: var(--shadow-float);
+
+  .card-humanist:hover {
+    box-shadow: var(--shadow-modal);
     transform: translateY(-4px);
     border-color: var(--accent);
   }
-  
-  /* Primary Button */
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold rounded-2xl transition-all active:scale-[0.98] shadow-sm tracking-widest uppercase text-[11px];
-    background-color: var(--accent);
-    color: white;
+
+  .btn-tactile {
+    transition: all 0.3s;
   }
 
-  .btn-primary:hover {
-    filter: brightness(1.1);
+  .btn-tactile:active {
+    transform: scale(0.97);
   }
 
-  /* Secondary Button */
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-7 py-3.5 font-bold rounded-2xl transition-all active:scale-[0.98] tracking-widest uppercase text-[11px] border;
-    background-color: var(--bg-elevated);
-    color: var(--text-primary);
-    border-color: var(--border-fine);
+  .glass-nav {
+    position: sticky;
+    top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 50;
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    background-color: rgba(252, 250, 248, 0.8);
+    border: 0.8px solid var(--border-fine);
+    border-radius: var(--radius-lg);
+    width: calc(100% - 2rem);
+    max-width: 1100px;
   }
 
-  .btn-secondary:hover {
-    background-color: var(--bg-surface);
-    border-color: var(--accent);
+  .dark .glass-nav {
+    background-color: rgba(10, 10, 10, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
   }
 }
 
+/* ─── HI-FI UTILITIES ─── */
+@layer utilities {
+  .glass-apple {
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    transition: all 0.5s;
+    background-color: rgba(250, 249, 246, 0.75);
+    border: 1px solid rgba(56, 49, 46, 0.05);
+  }
+
+  .dark .glass-apple {
+    background-color: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .shadow-float {
+    box-shadow: 0 20px 50px -12px rgba(56, 49, 46, 0.12), 0 0 0 1px var(--border-fine);
+  }
+
+  .dark .shadow-float {
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-fine);
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(64px);
+    -webkit-backdrop-filter: blur(64px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: var(--bg-surface);
+  }
+
+  .dark .glass-panel {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .text-gradient {
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to bottom right, var(--text-primary), var(--accent));
+  }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+/* Luxury Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+/* Custom scrollbar matching tokens */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-fine);
+  border-radius: 10px;
+  border: 1px solid var(--bg-base);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Selection Highlight */
+::selection {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+/* Brute-Force Button Contrast Fix */
+.bg-accent, .btn-accent, button[class*="bg-accent"], [class*="bg-accent"], .button--primary {
+  color: #FFFFFF !important;
+}
+.bg-accent *, .btn-accent *, button[class*="bg-accent"] * {
+  color: #FFFFFF !important;
+}

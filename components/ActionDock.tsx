@@ -1,113 +1,139 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Globe, Snowflake, MessageSquare, Sparkles, Languages } from 'lucide-react';
-import { useLanguage } from './LanguageProvider';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Languages, Snowflake, MessageSquare, BookOpen, Command } from "lucide-react";
+import { useLanguage } from "./LanguageProvider";
 
 /**
- * HASSAAN AI ARCHITECT — ActionDock v3.0
- * Signature 3-Button Layout: [Language, Snow, AI Chat]
- * Aesthetic: Apple Lightning Glass (Warm-Neutral / Fine-Border)
+ * HASSAAN AI ARCHITECT — ActionDock Node
+ * v4.0: Unified High-fidelity dock with Humanist aesthetics.
  */
-export function ActionDock() {
-  const { language, setLanguage } = useLanguage();
+export function ActionDock({ isPortfolio = false }: { isPortfolio?: boolean }) {
+  const { language, setLanguage, t } = useLanguage();
+  const [showLanguage, setShowLanguage] = useState(false);
   const [isSnowing, setIsSnowing] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  
+  const dockRef = useRef<HTMLDivElement>(null);
+  const languageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const snowPref = localStorage.getItem('panaversity-snow') === 'true';
-    setIsSnowing(snowPref);
-  }, []);
+    const savedSnow = localStorage.getItem("h1_snow_enabled") === "true";
+    setIsSnowing(savedSnow);
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showLanguage && languageRef.current && !languageRef.current.contains(event.target as Node)) {
+        setShowLanguage(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showLanguage]);
 
   const toggleSnow = () => {
     const newState = !isSnowing;
     setIsSnowing(newState);
-    localStorage.setItem('panaversity-snow', String(newState));
-    window.dispatchEvent(new Event('snow-toggle'));
-  };
-
-  const toggleChat = () => {
-    window.dispatchEvent(new Event('toggle-aira'));
+    localStorage.setItem("h1_snow_enabled", newState.toString());
+    window.dispatchEvent(new CustomEvent("toggle-snow", { detail: { enabled: newState } }));
+    window.dispatchEvent(new Event('snow-toggle')); // Compatibility with older H4 internal events
   };
 
   const languages = [
-    { code: 'en', label: 'English', native: 'English' },
-    { code: 'ur', label: 'Urdu', native: 'اردو' },
-    { code: 'ru', label: 'Roman Urdu', native: 'Urdu' }
+    { code: 'en', name: 'English' },
+    { code: 'ur', name: 'Urdu' },
+    { code: 'ru', name: 'Roman Urdu' }
+  ];
+
+  const navItems = [
+    { 
+      id: "lang", 
+      icon: <Languages size={20} />, 
+      label: t.ui?.language || "Language", 
+      action: () => setShowLanguage(!showLanguage),
+      active: showLanguage 
+    },
+    { 
+      id: "snow", 
+      icon: <Snowflake size={20} className={isSnowing ? "text-accent animate-spin-slow" : ""} />, 
+      label: t.ui?.snow || "Atmosphere", 
+      action: toggleSnow,
+      active: isSnowing 
+    },
+    { 
+      id: "chat", 
+      icon: <MessageSquare size={20} />, 
+      label: t.ui?.companion || "Aira Chat", 
+      action: () => window.dispatchEvent(new CustomEvent("toggle-aira")),
+      active: false 
+    },
+    ...(!isPortfolio ? [{
+      id: "notebook",
+      icon: <BookOpen size={20} />,
+      label: t.ui?.notebook || "Notebook",
+      action: () => window.dispatchEvent(new CustomEvent("toggle-notebook")),
+      active: false
+    }] : []),
+    {
+      id: "cmd",
+      icon: <Command size={20} />,
+      label: "Command ⌘K",
+      action: () => window.dispatchEvent(new CustomEvent("toggle-command-palette")),
+      active: false
+    }
   ];
 
   return (
-    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[10000] flex items-center gap-3">
-      {/* Container with High-Fidelity Humanist Glass */}
-      <div className="flex items-center gap-2 p-2 bg-[#FAF9F6]/85 backdrop-blur-2xl border-[0.8px] border-[#E5E0D8]/60 rounded-[32px] shadow-[0_20px_50px_-12px_rgba(45,41,38,0.12)]">
-        
-        {/* Language Protocol Button */}
-        <div className="relative group">
-          <button
-            onClick={() => setActiveMenu(activeMenu === 'lang' ? null : 'lang')}
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
-              activeMenu === 'lang' ? 'bg-[#D97757] text-white shadow-md' : 'text-[#8A857D] hover:bg-white/80 hover:text-[#38312E]'
-            }`}
+    <div ref={dockRef} className={`fixed bottom-10 z-[9999] flex flex-col items-center gap-4 ${language === 'ur' ? 'left-10' : 'right-10'}`}>
+      <AnimatePresence>
+        {showLanguage && (
+          <motion.div
+            ref={languageRef}
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+            className="flex flex-col gap-2 glass-apple p-2 rounded-2xl shadow-float mb-2"
           >
-            <Languages size={20} strokeWidth={1.8} />
-          </button>
-          
-          <AnimatePresence>
-            {activeMenu === 'lang' && (
-              <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                className="absolute bottom-16 left-0 min-w-[160px] bg-[#FAF9F6]/95 backdrop-blur-3xl border-[0.8px] border-[#E5E0D8] rounded-2xl shadow-float p-1.5 overflow-hidden"
+            {languages.map((l) => (
+              <button
+                key={l.code}
+                onClick={() => {
+                  setLanguage(l.code as any);
+                  setShowLanguage(false);
+                }}
+                className={`px-5 py-2.5 rounded-xl text-[11px] font-bold transition-all uppercase tracking-widest ${
+                  language === l.code 
+                    ? "bg-accent text-white shadow-md scale-105" 
+                    : "text-text-secondary hover:bg-bg-base hover:text-accent"
+                }`}
               >
-                <div className="px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#D97757]/80 opacity-60 font-mono mb-1">Language Protocol</div>
-                {languages.map((l) => (
-                  <button
-                    key={l.code}
-                    onClick={() => {
-                      setLanguage(l.code as any);
-                      setActiveMenu(null);
-                    }}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
-                      language === l.code ? 'bg-[#D97757]/10 text-[#D97757] font-bold' : 'text-[#38312E] hover:bg-white shadow-sm'
-                    }`}
-                  >
-                    <span className="text-xs">{l.label}</span>
-                    <span className="text-[10px] opacity-40 italic">{l.native}</span>
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                {l.name}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* Atmospheric Snow Button */}
-        <button
-          onClick={toggleSnow}
-          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
-            isSnowing ? 'bg-[#F0EBE1] text-[#D97757] shadow-inner font-bold border-[0.8px] border-[#D97757]/20 scale-[0.95]' : 'text-[#8A857D] hover:bg-white/80 hover:text-[#38312E]'
-          }`}
-        >
-          <Snowflake size={20} strokeWidth={1.8} className={isSnowing ? "animate-pulse" : ""} />
-        </button>
-
-        {/* Divider */}
-        <div className="w-[1px] h-8 bg-[#E5E0D8]/40 mx-1" />
-
-        {/* AI Catalyst Button */}
-        <button
-          onClick={toggleChat}
-          className="w-14 h-12 bg-gradient-to-br from-[#D97757] to-[#8C3F2F] text-white rounded-full flex items-center justify-center transition-all duration-500 hover:scale-[1.05] active:scale-[0.98] shadow-[0_8px_20px_-4px_rgba(217,119,87,0.4)] group overflow-hidden relative"
-        >
-          <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
-          <div className="relative flex items-center justify-center gap-1">
-             <MessageSquare size={18} strokeWidth={2.2} />
-             <Sparkles size={10} className="absolute -top-1 -right-1 text-white animate-pulse" />
-          </div>
-        </button>
-
+      <div className="flex flex-col gap-3 glass-apple p-2.5 rounded-full shadow-float border-white/20 dark:border-white/10">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={item.action}
+            className={`w-14 h-14 rounded-full flex items-center justify-center transition-all relative group ${
+              item.active 
+                ? "bg-accent text-white shadow-lg" 
+                : "text-text-secondary hover:bg-white dark:hover:bg-white/10 hover:text-accent hover:shadow-md"
+            }`}
+            title={item.label}
+          >
+            {item.icon}
+            <div className={`absolute ${language === 'ur' ? 'left-full ml-4' : 'right-full mr-4'} px-3 py-1.5 bg-text-primary text-bg-base text-[9px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] font-bold shadow-xl border border-white/20`}>
+              {item.label}
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );
 }
+

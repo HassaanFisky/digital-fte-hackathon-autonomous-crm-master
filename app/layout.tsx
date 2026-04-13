@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import EcosystemNav from "@/components/EcosystemNav";
 import { AiraAssistant } from "@/components/AiraAssistant";
+import { CommandPalette } from "@/components/CommandPalette";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { SnowOverlay } from "@/components/SnowOverlay";
 import { ActionDock } from "@/components/ActionDock";
@@ -40,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${lora.variable} selection:bg-[#D97757]/20 selection:text-[#D97757]`}>
+    <html lang="en" className={`${inter.variable} ${lora.variable} selection:bg-accent/20 selection:text-accent`}>
       <body className="font-sans bg-background text-foreground min-h-screen antialiased overflow-x-hidden">
         <LanguageProvider>
           {/* Subtle Background Detail */}
@@ -56,18 +57,21 @@ export default function RootLayout({
           </div>
 
           {/* Assistant Node */}
-          <AiraAssistant 
-            platform="H4" 
-            context="Digital FTE is monitoring the Kafka 'struggle.alerts' topic. CRM Tickets are synchronized. All autonomous agents are active." 
+          <AiraAssistant
+            platform="H4"
+            context="Digital FTE is monitoring the Kafka 'struggle.alerts' topic. CRM Tickets are synchronized. All autonomous agents are active."
           />
+
+          {/* Command-K Palette — Cmd+K / Ctrl+K or dock button */}
+          <CommandPalette />
 
           <Toaster 
             position="bottom-right" 
             toastOptions={{
               style: {
-                background: "#FAF9F6",
-                color: "#38312E",
-                border: "0.8px solid #E5E0D8",
+                background: "var(--bg-surface)",
+                color: "var(--text-primary)",
+                border: "0.8px solid var(--border-fine)",
                 fontSize: "14px",
                 fontWeight: 500,
                 borderRadius: "16px",
