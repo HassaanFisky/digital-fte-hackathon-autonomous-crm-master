@@ -160,7 +160,12 @@ export function AiraAssistant({ platform, context }: AiraAssistantProps) {
             initial={{ opacity: 0, scale: 0.95, y: 40 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 40 }}
-            className="fixed inset-x-4 md:inset-x-0 bottom-24 md:bottom-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[450px] h-[650px] max-h-[85vh] glass-apple rounded-[2.5rem] shadow-float z-[10001] flex flex-col overflow-hidden border-white/20 dark:border-white/10"
+            className={`fixed z-[10001] flex flex-col overflow-hidden
+              glass-apple rounded-[2.5rem] shadow-float
+              border border-white/20 dark:border-white/10
+              inset-x-4 bottom-24 h-[75vh] max-h-[650px]
+              md:inset-x-auto md:bottom-24 ${lang === "ur" ? "md:left-10" : "md:right-10"}
+              md:w-[450px] md:h-[650px]`}
           >
             {/* Header: High-Fidelity Humanist */}
             <div className="px-8 py-6 border-b border-border-fine bg-bg-base/40 flex items-center justify-between">

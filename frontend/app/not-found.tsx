@@ -2,63 +2,53 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Bot, Home, MessageSquare, ArrowLeft, Search, AlertTriangle } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Bot, Home, MessageSquare, AlertTriangle } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 p-6 relative overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-indigo-500/10 blur-[150px] rounded-full -z-0" />
-      
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="text-center relative z-10 max-w-lg"
+    <div className="flex flex-col items-center justify-center min-h-screen bg-bg-base text-text-primary p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="text-center max-w-lg"
       >
-        <div className="w-24 h-24 rounded-3xl bg-slate-900 border border-white/5 flex items-center justify-center mx-auto mb-10 shadow-2xl">
+        {/* Icon */}
+        <div className="w-20 h-20 rounded-[1.5rem] bg-bg-surface border border-border-fine flex items-center justify-center mx-auto mb-8 shadow-float">
           <motion.div
-            animate={{ 
-                rotate: [0, 10, -10, 0],
-                y: [0, -5, 5, 0]
-            }}
+            animate={{ rotate: [0, 8, -8, 0], y: [0, -4, 4, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            <Bot className="w-12 h-12 text-emerald-500" />
+            <Bot className="w-10 h-10 text-accent" />
           </motion.div>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 text-[10px] font-bold uppercase tracking-widest mb-6">
-          <AlertTriangle className="w-3 h-3" /> Error 404: Path Obscured
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-error/10 border border-error/20 text-error text-[10px] font-bold uppercase tracking-widest mb-6">
+          <AlertTriangle className="w-3 h-3" /> 404 — Page Not Found
         </div>
-        
-        <h1 className="text-4xl font-extrabold mb-4 tracking-tight">I couldn't find that page...</h1>
-        <p className="text-slate-400 mb-12 leading-relaxed text-balance">
-          ARIA searched the entire SaaS infrastructure but this route is not documented. Let me guide you back to a known coordinate.
+
+        <h1 className="text-3xl font-serif font-bold text-text-primary mb-3">
+          Route not found
+        </h1>
+        <p className="text-text-secondary mb-10 leading-relaxed">
+          ARIA searched the system but this route doesn't exist. Let me guide you back.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link href="/" className="w-full">
-                <Button variant="secondary" className="w-full h-14" leftIcon={<Home className="w-4 h-4" />}>
-                    Home Base
-                </Button>
-            </Link>
-            <Link href="/support" className="w-full">
-                <Button variant="primary" className="w-full h-14" leftIcon={<MessageSquare className="w-4 h-4" />}>
-                    Support Hub
-                </Button>
-            </Link>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            href="/"
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-[var(--radius-sm)] bg-bg-elevated border border-border-fine text-text-secondary hover:border-accent hover:text-accent transition-all text-[11px] font-bold uppercase tracking-widest"
+          >
+            <Home className="w-4 h-4" /> Home
+          </Link>
+          <Link
+            href="/support"
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-[var(--radius-sm)] bg-accent text-white hover:opacity-90 transition-all text-[11px] font-bold uppercase tracking-widest shadow-lg"
+          >
+            <MessageSquare className="w-4 h-4" /> Support Hub
+          </Link>
         </div>
-
-        <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="mt-16 flex items-center justify-center gap-2 text-slate-600 font-mono text-xs"
-        >
-            <Search className="w-3 h-3" />
-            <span>Scanning for active channels... Web Port: 3000 Active</span>
-        </motion.div>
       </motion.div>
     </div>
   );

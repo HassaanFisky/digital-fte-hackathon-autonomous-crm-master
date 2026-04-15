@@ -194,10 +194,99 @@ html {
   color: var(--accent);
 }
 
-/* Brute-Force Button Contrast Fix */
-.bg-accent, .btn-accent, button[class*="bg-accent"], [class*="bg-accent"], .button--primary {
+/* ─── CRM-SPECIFIC COMPONENT CLASSES ─── */
+@layer components {
+  /* Document card — clean minimal card matching LearnFlow aesthetic */
+  .document-card {
+    background-color: var(--bg-surface);
+    border: 0.8px solid var(--border-fine);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    transition: border-color 0.3s ease, box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .document-card:hover {
+    border-color: var(--border-active);
+    box-shadow: var(--shadow-modal);
+  }
+  .dark .document-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Primary action button */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background-color: var(--accent);
+    color: #FFFFFF;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .btn-primary:hover  { opacity: 0.88; transform: translateY(-1px); }
+  .btn-primary:active { transform: scale(0.97); }
+
+  /* Secondary action button */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background-color: var(--bg-elevated);
+    color: var(--text-secondary);
+    border: 0.8px solid var(--border-fine);
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .btn-secondary:hover  { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  .btn-secondary:active { transform: scale(0.97); }
+
+  /* Glass companion window surface */
+  .glass-companion {
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    background-color: rgba(252, 250, 248, 0.90);
+    border: 0.8px solid var(--border-fine);
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .dark .glass-companion {
+    background-color: rgba(14, 14, 14, 0.92);
+    border-color: rgba(255, 255, 255, 0.07);
+  }
+
+  /* Shadow float used on docks and panels */
+  .shadow-float {
+    box-shadow: 0 20px 50px -12px rgba(56, 49, 46, 0.12), 0 0 0 1px var(--border-fine);
+  }
+  .dark .shadow-float {
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-fine);
+  }
+}
+
+/* Fade-in animation for AI report */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Button text contrast guarantee */
+.btn-primary, .bg-accent, button[class*="bg-accent"], [class*="bg-accent"] {
   color: #FFFFFF !important;
 }
-.bg-accent *, .btn-accent *, button[class*="bg-accent"] * {
+.btn-primary *, .bg-accent *, button[class*="bg-accent"] * {
   color: #FFFFFF !important;
 }

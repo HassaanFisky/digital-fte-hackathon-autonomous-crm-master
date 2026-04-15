@@ -96,10 +96,8 @@ export function CompanionShell({
             }}
             className={`
               fixed z-[10001]
-              /* Mobile: full-width bottom sheet */
               inset-x-0 bottom-0 rounded-t-[2rem] rounded-b-none h-[88vh]
-              /* Desktop: positioned panel near dock */
-              md:inset-x-auto md:bottom-24 md:${side}
+              md:inset-x-auto md:bottom-24 ${isRTL ? "md:left-10" : "md:right-10"}
               md:w-[760px] md:h-[660px] md:rounded-[2rem]
               glass-companion shadow-float
               flex overflow-hidden

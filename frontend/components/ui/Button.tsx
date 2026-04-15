@@ -31,12 +31,12 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   const variants = {
-    primary: 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-lg shadow-emerald-500/20 font-bold',
-    secondary: 'bg-slate-800 text-white hover:bg-slate-700 border border-slate-700 font-bold',
-    ghost: 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5 font-medium',
-    outline: 'bg-transparent text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/10 font-bold',
-    danger: 'bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500/20 font-bold',
-    premium: 'bg-gradient-to-r from-indigo-500 to-emerald-500 text-white font-extrabold hover:opacity-90 shadow-xl shadow-indigo-500/20',
+    primary:   'bg-accent text-white hover:opacity-90 shadow-lg font-bold uppercase tracking-widest text-[11px]',
+    secondary: 'bg-bg-elevated text-text-secondary border border-border-fine hover:border-accent hover:text-accent font-bold uppercase tracking-widest text-[11px]',
+    ghost:     'bg-transparent text-text-muted hover:text-text-primary hover:bg-bg-elevated font-medium',
+    outline:   'bg-transparent text-accent border border-accent/30 hover:bg-accent/10 font-bold uppercase tracking-widest text-[11px]',
+    danger:    'bg-error/10 text-error border border-error/20 hover:bg-error/20 font-bold uppercase tracking-widest text-[11px]',
+    premium:   'bg-gradient-to-r from-accent to-amber-500 text-white font-extrabold hover:opacity-90 shadow-xl',
   };
 
   const sizes = {
