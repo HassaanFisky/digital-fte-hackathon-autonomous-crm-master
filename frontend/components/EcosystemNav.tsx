@@ -12,11 +12,11 @@ import { useSession, signOut } from "@/lib/auth-client";
  * Standardized across all hackathon modules.
  */
 const ECOSYSTEM_APPS = [
-  { name: "Portfolio Hub", image: "https://panaversity-h0-portfolio.vercel.app/blueprint-footer.png", url: "https://panaversity-h0-portfolio.vercel.app", id: "H0" },
-  { name: "Physical AI & Robotics", image: "https://h1robotics.vercel.app/h1-thumb.png", url: "https://h1robotics.vercel.app", id: "H1" },
-  { name: "Evolution of To-Do", image: "https://evolution-of-todo.vercel.app/h2-thumb.png", url: "https://evolution-of-todo.vercel.app", id: "H2" },
-  { name: "LearnFlow Engine", image: "https://learnflow-platform-h3.vercel.app/h2-thumb.png", url: "https://learnflow-platform-h3.vercel.app", id: "H3" },
-  { name: "Companion FTE", image: "https://frontend-ochre-mu-82.vercel.app/h4-thumb.png", url: "https://frontend-ochre-mu-82.vercel.app", id: "H4" },
+  { name: "Portfolio Hub",         image: "https://hassaanfisky-portfolio.vercel.app/blueprint-footer.png", url: "https://hassaanfisky-portfolio.vercel.app",                      id: "H0" },
+  { name: "Physical AI & Robotics",image: "https://hassaanfisky-portfolio.vercel.app/h1-thumb.png",         url: "https://physical-ai-humanoid-robots-textbook.vercel.app",        id: "H1" },
+  { name: "Evolution of To-Do",    image: "https://hassaanfisky-portfolio.vercel.app/h2-thumb.png",         url: "https://evolution-of-todo.vercel.app",                           id: "H2" },
+  { name: "LearnFlow Engine",      image: "https://hassaanfisky-portfolio.vercel.app/h3-thumb.png",         url: "https://hassaanfisky-learnflow-h3.vercel.app",                   id: "H3" },
+  { name: "AI Companion FTE",      image: "https://hassaanfisky-portfolio.vercel.app/h4-thumb.png",         url: "https://hassaanfisky-aira-digital-fte.vercel.app",               id: "H4" },
 ];
 
 export function EcosystemNav() {
